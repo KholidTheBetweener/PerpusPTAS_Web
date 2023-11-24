@@ -104,8 +104,8 @@
                         </td>
                         <td>
                         @if(request('type') == 'pending' || request('type') == 'null')
-                        <form action="{{ route('pinjam.destroy',$row['id']) }}" method="Post">
-                                <a class="btn btn-primary" href="{{ route('pinjam.edit',$row['id']) }}">Edit</a>
+                        <form action="{{ route('rent.destroy',$row['id']) }}" method="Post">
+                                <a class="btn btn-primary" href="{{ route('rent.edit',$row['id']) }}">Edit</a>
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger">Hapus</button>
