@@ -1,0 +1,55 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\BookController;
+use App\Http\Controllers\RentController;
+use App\Http\Controllers\CategoriesController;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Auth::routes();
+Route::get('/admin',[LoginController::class,'showAdminLoginForm'])->name('admin.login-view');
+Route::post('/admin',[LoginController::class,'adminLogin'])->name('admin.login');
+Route::get('/admin/register',[RegisterController::class,'showAdminRegisterForm'])->name('admin.register-view');
+Route::post('/admin/register',[RegisterController::class,'createAdmin'])->name('admin.register');
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/admin/dashboard',function(){
+    return view('admin');
+})->middleware('auth:admin')->name('admin.dashboard');
+
+//Admin Resource
+
+Route::get('/admin/rent/all',[RentController::class,'all'])->middleware('auth:admin');
+Route::get('/admin/rent/return',[RentController::class,'kembali'])->middleware('auth:admin');
+Route::post('/admin/rent/track',[RentController::class,'track'])->middleware('auth:admin');
+Route::post('/admin/user/photo/{user}',[UserController::class,'photo'])->middleware('auth:admin')->name('user.photo');
+Route::post('/admin/book/cover/{book}',[BookController::class,'cover'])->middleware('auth:admin')->name('book.cover');
+Route::post('/admin/book/barcode/{book}',[BookController::class,'barcode'])->middleware('auth:admin')->name('book.barcode');
+Route::resource('/admin/admin',AdminController::class)->middleware('auth:admin');
+Route::resource('/admin/user',UserController::class)->middleware('auth:admin');
+Route::resource('/admin/book',BookController::class)->middleware('auth:admin');
+Route::resource('/admin/rent',RentController::class)->middleware('auth:admin');
+Route::resource('/admin/categories',CategoriesController::class)->middleware('auth:admin');
+
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
