@@ -28,6 +28,30 @@ class RentController extends Controller
         $pinjam->save();
         return redirect()->route('rent.index')->with('success','Buku Telah dikembalikan');
     }
+    protected function approve(Request $request, Rent $rent)
+    {
+        $rent->date_rent = Carbon::now();
+        $rent->date_return = $rent->date_rent->addWeeks(2);
+        $rent->save();
+        return redirect()->route('rent.index')->with('success','Peminjaman telah disetjui');
+    }
+    protected function return(Request $request, Rent $rent)
+    {
+        $rent->date_return = Carbon::now();
+        $rent->status = false;
+        $rent->save();
+        return redirect()->route('rent.index')->with('success','Buku Telah dikembalikan');
+    }
+    protected function alert(Request $request, Rent $rent)
+    {
+        //notify->rentoverdue
+        return redirect()->route('rent.index')->with('success','Peringatan telat pengembalian telah dikirim');
+    }
+    protected function warning(Request $request, Rent $rent)
+    {
+        //notify->rentoverdue
+        return redirect()->route('rent.index')->with('success','Peringatan telat pengembalian telah dikirim');
+    }
     protected function index(Request $request)
     {
         //$rows = Rent::query()->with(['book', 'user'])->paginate(5)->toArray(); // the rows will be in data key

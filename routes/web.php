@@ -43,6 +43,10 @@ Route::post('/admin/rent/track',[RentController::class,'track'])->middleware('au
 Route::post('/admin/user/photo/{user}',[UserController::class,'photo'])->middleware('auth:admin')->name('user.photo');
 Route::post('/admin/book/cover/{book}',[BookController::class,'cover'])->middleware('auth:admin')->name('book.cover');
 Route::post('/admin/book/barcode/{book}',[BookController::class,'barcode'])->middleware('auth:admin')->name('book.barcode');
+Route::post('/admin/rent/approve/{rent}',[RentController::class,'approve'])->middleware('auth:admin')->name('rent.approve');
+Route::post('/admin/rent/alert/{rent}',[RentController::class,'alert'])->middleware('auth:admin')->name('rent.alert');
+Route::post('/admin/rent/return/{rent}',[RentController::class,'return'])->middleware('auth:admin')->name('rent.return');
+Route::post('/admin/rent/warning/{rent}',[RentController::class,'warning'])->middleware('auth:admin')->name('rent.warning');
 Route::resource('/admin/admin',AdminController::class)->middleware('auth:admin');
 Route::resource('/admin/user',UserController::class)->middleware('auth:admin');
 Route::resource('/admin/book',BookController::class)->middleware('auth:admin');

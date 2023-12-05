@@ -2,7 +2,7 @@
 <html>
     <head>  
         <title>Perpustakaan Perkantas - @yield('title')</title>
-        @vite(['resources/js/app.js'])
+        @vite(['resources/sass/app.scss', 'resources/js/app.js'])
         @include('partials.dashHead')
     </head>
     <style>

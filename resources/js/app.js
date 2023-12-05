@@ -1,3 +1,9 @@
+import jquery from 'jquery';
+window.$ = jquery;
+  
+import swal from 'sweetalert2';
+window.swal = swal;
+
 import './bootstrap';
 $(document).ready(function () {
 
