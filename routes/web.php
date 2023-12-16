@@ -8,7 +8,11 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\RentController;
 use App\Http\Controllers\CategoriesController;
-
+use App\Models\Admin;
+use App\Models\User;
+use App\Models\Book;
+use App\Models\Rent;
+use Carbon\Carbon;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -32,7 +36,13 @@ Route::post('/admin/register',[RegisterController::class,'createAdmin'])->name('
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/admin/dashboard',function(){
-    return view('admin');
+    $admin = Admin::count();
+    $user = User::count();
+    $book = Book::count();
+    $apply = Rent::whereNull('status')->whereNotNull('date_request')->count();
+    $rent = Rent::where('status', true)->whereNotNull('date_rent')->count();
+    $due = Rent::where('date_due', '>', Carbon::now())->count();    
+    return view('admin', compact('admin', 'user', 'book', 'apply', 'rent', 'due'));
 })->middleware('auth:admin')->name('admin.dashboard');
 
 //Admin Resource

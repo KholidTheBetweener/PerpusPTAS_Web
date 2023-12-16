@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('book_code')->unique();
             $table->string('book_title');
             $table->string('author');
-            $table->string('category');
+            $table->biginteger('category');
             $table->string('publisher')->nullable();
             $table->integer('stock');
             $table->string('book_cover')->nullable();

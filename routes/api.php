@@ -6,6 +6,7 @@ use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\BookController;
 use App\Http\Controllers\API\RentController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\CategoriesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,12 +22,16 @@ Route::controller(RegisterController::class)->group(function(){
     Route::post('register', 'register');
     Route::post('login', 'login');
 });
+Route::controller(BookController::class)->group(function(){
+    Route::get('index', 'index');
+});
 Route::middleware('auth:sanctum')->group(function(){
-    Route::resource('books', BookController::class);
+    Route::get('categories', [CategoriesController::class, 'index']);
     //Route::resource('users', UserController::class);
     Route::get('myProfile', [UserController::class, 'show']);
     Route::post('myProfile', [UserController::class, 'update']);
     Route::post('photo', [UserController::class, 'store']);
     Route::post('password', [UserController::class, 'password']);
+    Route::resource('books', BookController::class);
     Route::resource('rent', RentController::class);
 });

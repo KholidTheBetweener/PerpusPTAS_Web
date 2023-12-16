@@ -31,7 +31,8 @@ class RentController extends Controller
     protected function approve(Request $request, Rent $rent)
     {
         $rent->date_rent = Carbon::now();
-        $rent->date_return = $rent->date_rent->addWeeks(2);
+        $rent->date_due = $rent->date_rent->addWeeks(2);
+        $rent->status = true;
         $rent->save();
         return redirect()->route('rent.index')->with('success','Peminjaman telah disetjui');
     }

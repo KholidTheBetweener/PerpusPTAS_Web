@@ -55,6 +55,7 @@ class BookController extends Controller
     }
     protected function cover(Request $request, Book $book)
     {
+        //path file name folder/profileimage
         $request->validate([
             'book_cover' => 'required|file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);

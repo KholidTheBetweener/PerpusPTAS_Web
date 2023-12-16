@@ -6,18 +6,17 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use App\Models\Rent;
 
-class RentReturn extends Notification
+class RentReject extends Notification
 {
     use Queueable;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct(Rent $rent)
+    public function __construct()
     {
-        $this->rent = $rent; 
+        //
     }
 
     /**
@@ -27,8 +26,20 @@ class RentReturn extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database'];
+        return ['mail'];
     }
+
+    /**
+     * Get the mail representation of the notification.
+     */
+    public function toMail(object $notifiable): MailMessage
+    {
+        return (new MailMessage)
+                    ->line('The introduction to the notification.')
+                    ->action('Notification Action', url('/'))
+                    ->line('Thank you for using our application!');
+    }
+
     /**
      * Get the array representation of the notification.
      *
@@ -37,10 +48,7 @@ class RentReturn extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'title' => 'Buku Telah Dikembalikan',
-            'message' => "Buku {$this->rent->book->book_title} dipinjam oleh {$this->rent->user->name} telah dikembalikan pada {$this->rent->date_return}",
-            'type' => 'rent',
-            'id' => $this->rent->id,
+            //
         ];
     }
 }

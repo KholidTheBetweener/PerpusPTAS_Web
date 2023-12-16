@@ -33,7 +33,7 @@
                     <tr>
                         <td><img src="/book_cover/{{ $buku->book_cover }}" width="100px"></td>
                         <td>{{ $buku->book_title }}</td>
-                        <td>{{ $buku->category }}</td>
+                        <td>{{ $buku->categories->name }}</td>
                         <td>{{ $buku->stock }}</td>
                         <td>
                             <form action="{{ route('book.destroy',$buku->id) }}" method="Post">

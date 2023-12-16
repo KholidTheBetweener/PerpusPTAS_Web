@@ -10,26 +10,65 @@
                                             </h1>
                                         </div>
                                 <div class="card mb-4">
-                                    <a href = "{{route('admin.index')}}">
+                                <table>
+                            <tbody>
+                            <tr>
+                            <td>
+                                <a href = "{{route('admin.index')}}">
                                     <div class="card-body">
                                         <h2 class="card-title">Kelola Admin</h2>
+                                        <p>{{ $admin }} akun admin</p>
                                     </div>
                                     </a>
-                                    <a href = "{{route('user.index')}}">
+                            </td>
+                            <td>
+                                <a href = "{{route('user.index')}}">
                                     <div class="card-body">
-                                        <h2 class="card-title">Kelola User</h2>
+                                        <h2 class="card-title">Kelola Pengguna</h2>
+                                        <p>{{ $user }} akun pengguna</p>
                                     </div>
                                     </a>
-                                    <a href = "{{route('book.index')}}">
+                            </td>
+                            <td>
+                                <a href = "{{route('book.index')}}">
                                     <div class="card-body">
                                         <h2 class="card-title">Kelola Buku</h2>
+                                        <p>{{ $book }} buku perpustakaan</p>
                                     </div>
                                     </a>
-                                    <a href = "{{route('rent.index')}}">
+                            </td>
+                            </tr>
+                            <tr>
+                            <td>
+                            <a href = "{{route('rent.index', [ 'type' => 'pending' ])}}">
                                     <div class="card-body">
-                                        <h2 class="card-title">Awasi Peminjaman Buku</h2>
+                                        <h2 class="card-title">Pengajuan Peminjaman Buku</h2>
+                                        <p>{{ $apply }} pengajuan pinjam buku</p>
                                     </div>
                                     </a>
+                            </td>
+                            <td>
+                            <a href = "{{route('rent.index', [ 'type' => 'renting' ])}}">
+                                    <div class="card-body">
+                                        <h2 class="card-title">Peminjaman Buku Sedang Berjalan</h2>
+                                        <p>{{ $rent }} buku sedang dipinjam oleh pengguna</p>
+                                    </div>
+                                    </a>
+                            </td>
+                            <td>
+                            <a href = "{{route('rent.index', [ 'type' => 'overdue' ])}}">
+                                    <div class="card-body">
+                                        <h2 class="card-title">Telat Pengembalian Buku</h2>
+                                        <p>{{ $due }} pengguna telat mengembalian buku</p>
+                                    </div>
+                                    </a>
+                            </td>
+                            </tr>
+                            </tbody>
+                            </table>
+                                    
+                                    
+                                    
                                 </div>
                             </div>
                         </div>

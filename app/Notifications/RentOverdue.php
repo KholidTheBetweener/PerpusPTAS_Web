@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use App\Models\Rent;
 
 class RentOverdue extends Notification
 {
@@ -39,7 +40,7 @@ class RentOverdue extends Notification
     {
         return [
             'title' => 'Buku Telat Dikembalikan',
-            'message' => "Buku {$this->rent->book->book_title} dipinjam oleh blabla",
+            'message' => "Buku {$this->rent->book->book_title} dipinjam oleh {$this->rent->user->name} telah melewati batas waktu peminjaman pada {$this->rent->date_due}",
             'type' => 'rent',
             'id' => $this->rent->id,
         ];

@@ -21,16 +21,16 @@
         @endif
         <ul class="nav nav-tabs">
   <li class="nav-item">
-    <a class="nav-link @if(request('type') == 'pending' || request('type') == null) active @endif" aria-current="page" href="{{route('rent.index', [ 'type' => 'pending' ])}}">Pending</a>
+    <a class="nav-link @if(request('type') == 'pending' || request('type') == null) active @endif" aria-current="page" href="{{route('rent.index', [ 'type' => 'pending' ])}}">Pengajuan</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link @if(request('type') == 'renting') active @endif" href="{{route('rent.index', [ 'type' => 'renting' ])}}">Renting</a>
+    <a class="nav-link @if(request('type') == 'renting') active @endif" href="{{route('rent.index', [ 'type' => 'renting' ])}}">Peminjaman</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link @if(request('type') == 'overdue') active @endif" href="{{route('rent.index', [ 'type' => 'overdue' ])}}">Overdue</a>
+    <a class="nav-link @if(request('type') == 'overdue') active @endif" href="{{route('rent.index', [ 'type' => 'overdue' ])}}">Telat</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link @if(request('type') == 'finish') active @endif" href="{{route('rent.index', [ 'type' => 'finish' ])}}">Finish</a>
+    <a class="nav-link @if(request('type') == 'finish') active @endif" href="{{route('rent.index', [ 'type' => 'finish' ])}}">Dikembalikan</a>
   </li>
 </ul>
 <!-- Tabs content -->
@@ -61,7 +61,7 @@
                     @endif
                     </th>
                     <th>Status</th>
-                    <th width="280px">Aksi</th>
+                    <th width="280px" colspan="2">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -104,33 +104,48 @@
                         </td>
                         <td>
                         @if(request('type') == 'pending' || request('type') == null)
-                        <form action="{{ route('rent.destroy',$row['id']) }}" method="Post">
-                                <a class="btn btn-primary show-alert-approve-box" data-toggle="tooltip" title='approve' href="{{ route('rent.approve',$row['id']) }}">Terima</a>
+                            <form action="{{ route('rent.approve',$row['id']) }}" method="Post">
+                                @csrf
+                                <button type="submit" class="btn btn-primary show-alert-approve-box" data-toggle="tooltip" title='approve'>Terima</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form action="{{ route('rent.destroy',$row['id']) }}" method="Post">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger show-alert-delete-box" data-toggle="tooltip" title='Delete'>Tolak</button>
                             </form>
                         @endif
-                        @if(request('type') == 'renting') 
+                        @if(request('type') == 'renting')
                         <form action="{{ route('rent.return',$row['id']) }}" method="Post">
-                        <a class="btn btn-primary" href="{{ route('rent.alert',$row['id']) }}">Mendekati Deadline</a>        
                         @csrf
-                                <button type="submit" class="btn btn-danger">Selesai Pinjam</button>
+                                <button type="submit" class="btn btn-success show-alert-done-box" title='done'>Selesai</button>
                             </form>
+                        </td>
+                        <td>
+                        <form action="{{ route('rent.alert',$row['id']) }}" method="Post">
+                        @csrf
+                                <button type="submit" class="btn btn-warning show-alert-warning-box" title='warning'>Peringati</button>
+                        </form>
                         @endif    
-                        @if(request('type') == 'overdue') 
+                        @if(request('type') == 'overdue')
                         <form action="{{ route('rent.return',$row['id']) }}" method="Post">
-                                <a class="btn btn-primary" href="{{ route('rent.warning',$row['id']) }}">Peringati Peminjam</a>
                                 @csrf
-                                <button type="submit" class="btn btn-danger">Selesai Pinjam</button>
+                                <button type="submit" class="btn btn-success show-alert-done-box" title='done'>Selesai</button>
                             </form>
+                        </td>
+                        <td>
+                        <form action="{{ route('rent.warning',$row['id']) }}" method="Post">
+                        @csrf
+                                <button type="submit" class="btn btn-warning show-alert-warning-box" title='warning'>Peringatan</button>
+                            </form> 
                         @endif
                         @if(request('type') == 'finish') 
                         <form action="{{ route('rent.destroy',$row['id']) }}" method="Post">
                                 <a class="btn btn-primary" href="{{ route('rent.edit',$row['id']) }}">Edit</a>
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger">Hapus</button>
+                                <button type="submit" class="btn btn-danger show-alert-delete-box">Hapus</button>
                             </form>
                         @endif
                         </td>
@@ -149,15 +164,15 @@
 
             event.preventDefault();
             swal.fire({
-                title: "Are you sure you want to delete this record?",
-                text: "If you delete this, it will be gone forever.",
+                title: "Apa yakin mau menolak permintaan ini?",
+                text: "Permintaan ini akan dihapus.",
                 icon: "warning",
                 type: "warning",
                 //buttons: ["Cancel","Yes!"],
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
+                confirmButtonText: 'Ya, data dihapus!'
             }).then((willDelete) => {
                 if (willDelete) {
                     form.submit();
@@ -169,16 +184,57 @@
 
             event.preventDefault();
             swal.fire({
-                title: "Are you sure you want to approve this record?",
-                text: "Update this data into approval",
+                title: "Apa yakin ingin menyetujui permintaan ini?",
+                text: "Menyetujui Buku yang ingin dipinjam pengguna",
                 icon: "warning",
                 type: "warning",
-                buttons: ["Cancel","Yes!"],
+                //buttons: ["Cancel","Yes!"],
+                showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, approve it!'
-            }).then((willDelete) => {
-                if (willDelete) {
+                confirmButtonText: 'Ya, setujui permintaan!'
+            }).then((willapprove) => {
+                if (willapprove) {
+                    form.submit();
+                }
+            });
+        });
+        $(document).on('click', '.show-alert-warning-box', function(event){
+            var form =  $(this).closest("form");
+
+            event.preventDefault();
+            swal.fire({
+                title: "Apa yakin ingin mengirim notifikasi peringatan ke pengguna?",
+                text: "Kirim notifikasi peringatan ke pengguna",
+                icon: "warning",
+                type: "warning",
+                //buttons: ["Cancel","Yes!"],
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, peringati pengguna!'
+            }).then((willwarning) => {
+                if (willwarning) {
+                    form.submit();
+                }
+            });
+        });
+        $(document).on('click', '.show-alert-done-box', function(event){
+            var form =  $(this).closest("form");
+
+            event.preventDefault();
+            swal.fire({
+                title: "Apa yaking pengguna ingin mengembalikan buku ini?",
+                text: "Mengembalikan buku yang dipinjam pengguna",
+                icon: "warning",
+                type: "warning",
+                //buttons: ["Cancel","Yes!"],
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, finish reading it!'
+            }).then((willdone) => {
+                if (willdone) {
                     form.submit();
                 }
             });
