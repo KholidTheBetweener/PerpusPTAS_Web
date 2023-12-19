@@ -37,7 +37,7 @@
                             </form>
                         @endif
                         @isset ($user->photo)
-                        <img src="/photo/{{ $user->photo }}" width="200px">
+                        <img src="/{{ $user->photo }}" width="200px">
                         @endisset    
                     </td>
                     </tr>

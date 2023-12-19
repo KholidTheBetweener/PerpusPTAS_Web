@@ -10,9 +10,9 @@ use App\Models\Book;
 class Categories extends Model
 {
     use HasFactory;
-    public function book(): HasMany
+    public function books(): HasMany
     {
-        return $this->hasMany(Book::class, 'category');
+        return $this->hasMany(Book::class, 'id');
     }
     protected $fillable = [
         'name',

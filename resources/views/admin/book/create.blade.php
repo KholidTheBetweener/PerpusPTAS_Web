@@ -54,7 +54,7 @@
                         <strong>Kategori:</strong>
                         <select name="category" class="form-control" placeholder="Kategori">
                         @foreach($k as $k)    
-                        <option value="{{ $k->name }}">{{ $k->name }}</option>
+                        <option value="{{ $k->id }}">{{ $k->name }}</option>
                         @endforeach    
                         </select>
                         @error('category')

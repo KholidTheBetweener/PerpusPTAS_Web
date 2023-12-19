@@ -37,7 +37,7 @@ class BookController extends Controller
             $destinationPath = 'book_cover/';
             $profileImage = date('YmdHis') . "." . $bookCover->getClientOriginalExtension();
             $bookCover->move($destinationPath, $profileImage);
-            $input['book_cover'] = "$profileImage";
+            $input['book_cover'] = "book_cover/".$profileImage;
         }
         Book::create($input);
 
@@ -63,7 +63,7 @@ class BookController extends Controller
             $destinationPath = 'book_cover/';
             $profileImage = date('YmdHis') . "." . $book_cover->getClientOriginalExtension();
             $book_cover->move($destinationPath, $profileImage);
-            $book->book_cover = $profileImage;
+            $book->book_cover = "book_cover/".$profileImage;
         }
         $book->save();
         return redirect()->route('book.show', $book->id)->with('success','Book cover has been uploaded.');
@@ -94,7 +94,7 @@ class BookController extends Controller
             $destinationPath = 'book_cover/';
             $profileImage = date('YmdHis') . "." . $bookCover->getClientOriginalExtension();
             $bookCover->move($destinationPath, $profileImage);
-            $input['book_cover'] = "$profileImage";
+            $input['book_cover'] = "book_cover/".$profileImage;
         }
         $buku->fill($input->post())->save();
         return redirect()->route('book.index')->with('success','Buku Has Been updated successfully');

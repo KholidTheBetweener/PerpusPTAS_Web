@@ -31,7 +31,7 @@
             <tbody>
                 @foreach ($buku as $buku)
                     <tr>
-                        <td><img src="/book_cover/{{ $buku->book_cover }}" width="100px"></td>
+                        <td><img src="/{{ $buku->book_cover }}" width="100px"></td>
                         <td>{{ $buku->book_title }}</td>
                         <td>{{ $buku->categories->name }}</td>
                         <td>{{ $buku->stock }}</td>

@@ -64,7 +64,7 @@ class UserController extends BaseController
             $profileImage = date('YmdHis') . "." . $photo->getClientOriginalExtension();
             $photo->move($destinationPath, $profileImage);
             $user = \Auth::user();
-            $user->photo = $profileImage;
+            $user->photo = "photo/".$profileImage;
         }
         $user->save();
 

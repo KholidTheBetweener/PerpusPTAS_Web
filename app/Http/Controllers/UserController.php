@@ -39,7 +39,7 @@ class UserController extends Controller
             $destinationPath = 'photo/';
             $profileImage = date('YmdHis') . "." . $photo->getClientOriginalExtension();
             $photo->move($destinationPath, $profileImage);
-            $user->photo = $profileImage;
+            $user->photo = "photo/".$profileImage;
         }
         $user->save();
         return redirect()->route('user.show', $user->id)->with('success','User photo has been uploaded.');

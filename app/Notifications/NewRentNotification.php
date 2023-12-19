@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use App\Models\Rent;
 
 class NewRentNotification extends Notification
 {
@@ -14,9 +15,9 @@ class NewRentNotification extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct(Rent $rent)
     {
-        //
+        $this->rent = $rent;
     }
 
     /**
@@ -26,18 +27,7 @@ class NewRentNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
-    }
-
-    /**
-     * Get the mail representation of the notification.
-     */
-    public function toMail(object $notifiable): MailMessage
-    {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+        return ['database'];
     }
 
     /**
@@ -48,7 +38,10 @@ class NewRentNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            'title' => 'Ada Pengajuan Peminjaman Buku Baru',
+            'message' => "Ada Pengajuan Peminjaman Buku {$this->rent->book->book_title} oleh {$this->rent->user->name}",
+            'type' => 'rent',
+            'id' => $this->rent->id,
         ];
     }
 }

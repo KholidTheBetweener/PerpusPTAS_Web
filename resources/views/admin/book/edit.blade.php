@@ -25,7 +25,7 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="form-group">
-                        <strong>Cover:<img src="/book_cover/{{ $book->book_cover }}" width="100px"></strong>
+                        <strong>Cover:</strong>
                         <input type="file" name="book_cover" placeholder="Cover Buku" value="{{ $book->book_cover }}"
                         class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
                         @error('book_cover')
@@ -57,7 +57,7 @@
                         <strong>Kategori:</strong>
                         <select name="category" class="form-control" placeholder="{{ $book->category }}">
                         @foreach($k as $k)    
-                        <option value="{{ $k->name }}">{{ $k->name }}</option>
+                        <option value="{{ $k->id }}">{{ $k->name }}</option>
                         @endforeach    
                         </select>
                         @error('category')

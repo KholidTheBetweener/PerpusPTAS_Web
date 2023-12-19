@@ -37,7 +37,7 @@
                             </form>
                         @endif
                         @isset ($book->book_cover)
-                        <img src="/book_cover/{{ $book->book_cover }}" width="200px">
+                        <img src="/{{ $book->book_cover }}" width="200px">
                         @endisset    
                     </td>
                     </tr>
@@ -59,7 +59,7 @@
                     <tr>
                     <td>Kategori</td>
                     <td>:</td>
-                        <td>&ensp; {{ $book->category }}</td>
+                        <td>&ensp; {{ $book->categories->name }}</td>
                     </tr>
                     <tr>
                     <td>Stok</td>

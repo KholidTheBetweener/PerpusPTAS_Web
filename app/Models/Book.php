@@ -15,7 +15,7 @@ class Book extends Model
     use HasFactory;
     public function categories(): belongsTo
     {
-        return $this->belongsTo(Categories::class, 'id');
+        return $this->belongsTo(Categories::class, 'category', 'id');
     }
     public function rent(): HasMany
     {
