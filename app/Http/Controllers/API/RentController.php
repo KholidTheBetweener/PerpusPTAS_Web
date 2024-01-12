@@ -51,7 +51,32 @@ class RentController extends BaseController
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
-
+        $user = \Auth::user();
+        $arraynull = [];
+        if (!$user->name) {
+            $arraynull[] = "Nama";
+        }
+        if (!$user->email) {
+            $arraynull[] = "Email";
+        }
+        if (!$user->birth_place) {
+            $arraynull[] = "Tempat Lahir";
+        }
+        if (!$user->birth_date) {
+            $arraynull[] = "Tanggal Lahir";
+        }
+        if (!$user->phone) {
+            $arraynull[] = "Nomer Telepon";
+        }
+        if (!$user->address) {
+            $arraynull[] = "Alamat";
+        }
+        if (!$user->component) {
+            $arraynull[] = "Komponen";
+        }
+        if (!empty($arraynull)) {
+            return $this->sendError('profile belum lengkap.', $arraynull, 422);
+        }
         $input['user_id'] = \Auth::user()->id;
    
         $rent = Rent::create($input);

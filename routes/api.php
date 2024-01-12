@@ -29,6 +29,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('categories', [CategoriesController::class, 'index']);
     //Route::resource('users', UserController::class);
     Route::get('myProfile', [UserController::class, 'show']);
+    Route::get('checkProfile', [UserController::class, 'isProfileComplete']);
     Route::post('myProfile', [UserController::class, 'update']);
     Route::post('photo', [UserController::class, 'store']);
     Route::post('password', [UserController::class, 'password']);

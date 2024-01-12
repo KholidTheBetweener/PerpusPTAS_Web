@@ -9,8 +9,8 @@
                 </div>
                 <div class="pull-right mb-2">
                     <a class="btn btn-success" href="{{ route('rent.create') }}"> Peminjaman Baru</a>
-                    <a class="btn btn-primary" href="{{ url('/admin/rent/all')}}"> Catatan Peminjaman</a>
-                    <a class="btn btn-warning" href="{{ url('/admin/rent/kembali')}}"> Pengembalian Buku</a>
+                    <a class="btn btn-primary" href="{{ route('rent.record')}}"> Catatan Peminjaman</a>
+                    <a class="btn btn-warning" href="{{ route('rent.search')}}"> Pencarian Buku</a>
                 </div>
             </div>
         </div>
@@ -52,6 +52,9 @@
                     @endif
                     @if(request('type') == 'renting') 
                     Tanggal Pinjam
+                    </th>
+                    <th>
+                    Batas Pengembalian
                     @endif    
                     @if(request('type') == 'overdue') 
                     Tanggal Deadline Peminjaman
@@ -61,7 +64,7 @@
                     @endif
                     </th>
                     <th>Status</th>
-                    <th width="280px" colspan="2">Aksi</th>
+                    <th width="280px" colspan="3">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -80,12 +83,15 @@
                         @endif
                         @if(request('type') == 'renting') 
                         {{ $row->date_rent }}
+                        </td>
+                        <td>
+                        {{ $row->date_due }}
                         @endif    
                         @if(request('type') == 'overdue') 
                         {{ $row->date_due }}
                         @endif
                         @if(request('type') == 'finish') 
-                        {{ $row->date_finish }}
+                        {{ $row->date_return }}
                         @endif
                         </td>
                         <td>
@@ -96,17 +102,20 @@
                         Buku Sedang Dipinjam
                         @endif    
                         @if(request('type') == 'overdue') 
-                        Waktu Peminjaman Buku Habis dan Belum Dikembalikan
+                        Buku Belum Dikembalikan, Telat
                         @endif
                         @if(request('type') == 'finish') 
                         Buku Sudah Selesai Dipinjam
                         @endif
                         </td>
                         <td>
+                        <a class="btn btn-primary" href="{{ route('rent.show',$row['id']) }}">Detail</a>
+                        </td>
+                        <td>    
                         @if(request('type') == 'pending' || request('type') == null)
                             <form action="{{ route('rent.approve',$row['id']) }}" method="Post">
                                 @csrf
-                                <button type="submit" class="btn btn-primary show-alert-approve-box" data-toggle="tooltip" title='approve'>Terima</button>
+                                <button type="submit" class="btn btn-success show-alert-approve-box" data-toggle="tooltip" title='approve'>Terima</button>
                             </form>
                         </td>
                         <td>
@@ -137,12 +146,12 @@
                         <td>
                         <form action="{{ route('rent.warning',$row['id']) }}" method="Post">
                         @csrf
-                                <button type="submit" class="btn btn-warning show-alert-warning-box" title='warning'>Peringatan</button>
+                                <button type="submit" class="btn btn-danger show-alert-warning-box" title='warning'>Peringatan</button>
                             </form> 
                         @endif
                         @if(request('type') == 'finish') 
                         <form action="{{ route('rent.destroy',$row['id']) }}" method="Post">
-                                <a class="btn btn-primary" href="{{ route('rent.edit',$row['id']) }}">Edit</a>
+                                <a class="btn btn-warning" href="{{ route('rent.edit',$row['id']) }}">Edit</a>
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger show-alert-delete-box">Hapus</button>

@@ -15,6 +15,7 @@ class BookController extends Controller
         $buku = Book::orderBy('id')->paginate(5);
         return view('admin.book.index', compact('buku'));
     }
+    //buat insert buku banyak lewat excel
     public function create()
     {
         $k = Categories::all();

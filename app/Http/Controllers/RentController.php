@@ -14,30 +14,32 @@ class RentController extends Controller
 {
     protected function all()
     {
-        $rows = Rent::query()->with(['book', 'user'])->paginate(5)->toArray(); // the rows will be in data key
-        return view('admin.rent.all', ['rows' => $rows]);
+        $rows = Rent::query()->paginate(5)->toArray(); // the rows will be in data key
+        $now = Carbon::now();
+        return view('admin.rent.all', compact('rows', 'now'));
     }
-    protected function kembali()
+    protected function search()
     {
-        return view('admin.rent.kembali');
+        return view('admin.rent.search');
     }
     protected function track(Request $request)
     {
         $pinjam = Rent::where('book_code','like','%' . request('book_code') . '%')->first();
-        $pinjam->status = false;
         $pinjam->save();
-        return redirect()->route('rent.index')->with('success','Buku Telah dikembalikan');
+        return redirect()->route('rent.index')->with('success','Peminjaman Telah ditemukan');
     }
     protected function approve(Request $request, Rent $rent)
     {
+        //buku dipinjam kurang 1
         $rent->date_rent = Carbon::now();
-        $rent->date_due = $rent->date_rent->addWeeks(2);
+        $rent->date_due = Carbon::now()->addWeeks(2);
         $rent->status = true;
         $rent->save();
         return redirect()->route('rent.index')->with('success','Peminjaman telah disetjui');
     }
     protected function return(Request $request, Rent $rent)
     {
+        //buku dikembalikan tambah 1
         $rent->date_return = Carbon::now();
         $rent->status = false;
         $rent->save();
@@ -61,10 +63,10 @@ class RentController extends Controller
             $query = $query->whereNull('status')->whereNotNull('date_request');
         } 
         elseif ($request->type == 'renting'){
-            $query = $query->where('status', true)->whereNotNull('date_rent');
+            $query = $query->where('status', true)->whereNotNull('date_rent')->where('date_due', '>', Carbon::now());
         }
         elseif ($request->type == 'overdue'){
-            $query = $query->where('date_due', '>', Carbon::now());
+            $query = $query->where('status', true)->where('date_due', '<', Carbon::now());
         }
         elseif ($request->type == 'finish'){
             $query = $query->where('status', false)->whereNotNull('date_return');
@@ -77,6 +79,12 @@ class RentController extends Controller
         //dd($rows);
         return view('admin.rent.index', ['rows' => $rows]);
     }
+    
+    protected function show($id)
+    {
+        $pinjam = Rent::find($id);
+        return view('admin.rent.show',compact('pinjam'));
+    }
     public function create()
     {
         $user = User::all();
@@ -85,7 +93,8 @@ class RentController extends Controller
     }
     protected function store(Request $request)
     {
-        $iduser = User::where('email','like','%' . request('email') . '%')->first()->id;
+        //select2
+        $iduser = User::where('email','like','%' . request('name') . '%')->first()->id;
         $idbuku = Book::where('book_title','like','%' . request('book_title') . '%')->first()->id;
         Rent::create([
             'books_id' => $idbuku,
@@ -93,10 +102,6 @@ class RentController extends Controller
         ]);
         //$iduser->bukus()->attach($idbuku);
         return redirect()->route('rent.index')->with('success','Pinjam has been created successfully.');
-    }
-    protected function pinjam($id)
-    {
-        $pinjam = Rent::find($id);
     }
     public function edit(Rent $pinjam)
     {
@@ -118,9 +123,13 @@ class RentController extends Controller
         $pinjam->fill($request->post())->save();
         return redirect()->route('rent.index')->with('success','Pinjam Has Been updated successfully');
     }
-    protected function destroy(Rent $pinjam)
+    protected function destroy($id)
     {
-        $pinjam->delete();
-        return redirect()->route('rent.index')->with('success','Pinjam has been deleted successfully');
+        $rent = Rent::find($id);
+        $success = $rent->delete();
+        if($success)
+            return redirect()->route('rent.index')->with('success','Pinjam has been deleted successfully');
+        else
+            return redirect()->route('rent.index')->with('success','Pinjam has fail to delete');
     }
 }

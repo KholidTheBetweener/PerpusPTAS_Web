@@ -26,16 +26,16 @@ class CategoriesController extends Controller
         Categories::create($input);
         return redirect()->route('categories.index')->with('success','Kategori has been created successfully.');
     }
-    public function edit(Categories $kategori)
+    public function edit(Categories $category)
     {
-        return view('admin.categories.edit',compact('kategori'));
+        return view('admin.categories.edit',compact('category'));
     }
-    protected function update(Request $request, Categories $kategori)
+    protected function update(Request $request, Categories $category)
     {
         $request->validate([
             'name' => 'required',
         ]);
-        $kategori->fill($request->post())->save();
+        $category->fill($request->post())->save();
         return redirect()->route('categories.index')->with('success','Kategori Has Been updated successfully');
     }
     protected function destroy(Categories $kategori)

@@ -18,6 +18,38 @@ class UserController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function isProfileComplete(): JsonRespone
+    {
+        $user = \Auth::user();
+        $arraynull = [];
+        if (!$user->name) {
+            $arraynull[] = "Nama";
+        }
+        if (!$user->email) {
+            $arraynull[] = "Email";
+        }
+        if (!$user->birth_place) {
+            $arraynull[] = "Tempat Lahir";
+        }
+        if (!$user->birth_date) {
+            $arraynull[] = "Tanggal Lahir";
+        }
+        if (!$user->phone) {
+            $arraynull[] = "Nomer Telepon";
+        }
+        if (!$user->address) {
+            $arraynull[] = "Alamat";
+        }
+        if (!$user->component) {
+            $arraynull[] = "Komponen";
+        }
+        if (!empty($arraynull)) {
+            return $this->sendResponse(false, "Data Profile Kurang Lengkap");
+        }
+        else{
+            return $this->sendResponse(true, "Data Profile Sudah Lengkap");
+        }
+    }
     public function show(): JsonResponse
     {
         $user = \Auth::user();  

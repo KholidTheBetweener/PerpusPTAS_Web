@@ -19,14 +19,14 @@
             {{ session('status') }}
         </div>
         @endif
-        <form action="{{ route('categories.update',$kategori->id) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('categories.update',$category->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="row">                
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="form-group">
                         <strong>Nama Kategori:</strong>
-                        <input type="text" name="name" class="form-control" placeholder="Nama Kategori" value="{{ $kategori->name }}">
+                        <input type="text" name="name" class="form-control" placeholder="Nama Kategori" value="{{ $category->name }}">
                         @error('name')
                         <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
                         @enderror

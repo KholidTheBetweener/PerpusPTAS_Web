@@ -24,7 +24,8 @@
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="form-group">
                         <strong>Username:</strong>
-                        <input list="user" name="email" class="form-control" placeholder="Email User">
+                        <!-- change to select-->
+                        <input list="user" name="name" class="form-control" placeholder="Email User">
                             <datalist id="user">
                                 @foreach ($user as $user)
                                 <option value="{{ $user->email }}">

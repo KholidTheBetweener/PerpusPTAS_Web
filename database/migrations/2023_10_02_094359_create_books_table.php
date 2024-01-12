@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('publisher')->nullable();
             $table->integer('stock');
             $table->string('book_cover')->nullable();
-            $table->string('book_desc')->nullable();
+            $table->text('book_desc')->nullable();
             $table->string('barcode')->nullable();
             $table->timestamps();
         });

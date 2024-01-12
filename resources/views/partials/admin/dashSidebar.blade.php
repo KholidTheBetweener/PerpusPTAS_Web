@@ -60,15 +60,15 @@
               </a>
               <a class="text-white" href="{{route('rent.index')}}">
                 <i class="bi bi-clipboard mr-2"></i>
-                Peminjaman Aktif
+                Status Peminjaman
               </a>
-              <a class="text-white" href="{{ url('/admin/rent/all')}}">
+              <a class="text-white" href="{{route('rent.record')}}">
                 <i class="bi bi-clipboard-data mr-2"></i>
                 Catatan Peminjaman
               </a>
-              <a class="text-white" href="{{ url('/admin/rent/kembali')}}">
+              <a class="text-white" href="{{route('rent.search')}}">
                 <i class="bi bi-clipboard-check mr-2"></i>
-                Pengembalian Buku
+                Pencarian Peminjaman
               </a>
             </div>
             </li>
