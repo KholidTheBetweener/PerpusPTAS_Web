@@ -30,6 +30,9 @@ class RentController extends Controller
     }
     protected function approve(Request $request, Rent $rent)
     {
+        $book = Book::find($rent->books_id);
+        $book->stock = $book->stock - 1;
+        $book->save();
         //buku dipinjam kurang 1
         $rent->date_rent = Carbon::now();
         $rent->date_due = Carbon::now()->addWeeks(2);
@@ -39,6 +42,9 @@ class RentController extends Controller
     }
     protected function return(Request $request, Rent $rent)
     {
+        $book = Book::find($rent->books_id);
+        $book->stock = $book->stock + 1;
+        $book->save();
         //buku dikembalikan tambah 1
         $rent->date_return = Carbon::now();
         $rent->status = false;

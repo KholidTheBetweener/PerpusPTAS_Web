@@ -91,6 +91,8 @@ var firebaseConfig = {
   measurementId: "G-EV236HR4VF"
 };
 firebase.initializeApp(config); -->
-<!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/5.0.7/sweetalert2.min.css" rel="stylesheet"> -->
-</script>
+<!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/5.0.7/sweetalert2.min.css" rel="stylesheet"> 
+</script>-->
 
+<link href="resources/css/select2.min.css" rel="stylesheet" />
+<script src="resources/js/select2.min.js"></script>

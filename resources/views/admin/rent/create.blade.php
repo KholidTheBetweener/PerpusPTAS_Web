@@ -25,6 +25,11 @@
                     <div class="form-group">
                         <strong>Username:</strong>
                         <!-- change to select-->
+                        <select class="js-example-disabled-results">
+  <option value="one">First</option>
+  <option value="two" disabled="disabled">Second (disabled)</option>
+  <option value="three">Third</option>
+</select>
                         <input list="user" name="name" class="form-control" placeholder="Email User">
                             <datalist id="user">
                                 @foreach ($user as $user)
