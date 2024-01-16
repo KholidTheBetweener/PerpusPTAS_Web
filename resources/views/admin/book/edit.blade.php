@@ -86,8 +86,17 @@
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="form-group">
                         <strong>Deskripsi Buku:</strong>
-                        <input type="text" name="book_desc" placeholder="Deskripsi Buku" id="scanner" value="{{ $book->book_code }}" />
+                        <input type="text" name="book_desc" class="form-control" placeholder="Deskripsi Buku" value="{{ $book->book_desc }}">
                         @error('book_desc')
+                        <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <strong>Barcode:</strong>
+                        <input type="text" name="barcode" placeholder="Barcode Buku" id="scanner" value="{{ $book->barcode }}" />
+                        @error('barcode')
                         <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
                         @enderror
                     </div>

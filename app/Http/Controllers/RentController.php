@@ -9,6 +9,11 @@ use App\Models\Admin;
 use App\Models\User;
 use App\Models\Book;
 use Carbon\Carbon;
+use Illuminate\Notifications\Notification;
+use App\Notifications\RentAlert;
+use App\Notifications\RentApprove;
+use App\Notifications\RentReject;
+use App\Notifications\RentReturn;
 
 class RentController extends Controller
 {
@@ -38,6 +43,8 @@ class RentController extends Controller
         $rent->date_due = Carbon::now()->addWeeks(2);
         $rent->status = true;
         $rent->save();
+        $user = User::find($rent->users_id);
+        Notification::send($user, new RentApprove($rent));
         return redirect()->route('rent.index')->with('success','Peminjaman telah disetjui');
     }
     protected function return(Request $request, Rent $rent)
@@ -49,16 +56,20 @@ class RentController extends Controller
         $rent->date_return = Carbon::now();
         $rent->status = false;
         $rent->save();
+        $user = User::find($rent->users_id);
+        Notification::send($user, new RentReturn($rent));
         return redirect()->route('rent.index')->with('success','Buku Telah dikembalikan');
     }
     protected function alert(Request $request, Rent $rent)
     {
-        //notify->rentoverdue
+        $user = User::find($rent->users_id);
+        Notification::send($user, new RentAlert($rent));
         return redirect()->route('rent.index')->with('success','Peringatan telat pengembalian telah dikirim');
     }
     protected function warning(Request $request, Rent $rent)
     {
-        //notify->rentoverdue
+        $user = User::find($rent->users_id);
+        Notification::send($user, new RentAlert($rent));
         return redirect()->route('rent.index')->with('success','Peringatan telat pengembalian telah dikirim');
     }
     protected function index(Request $request)
@@ -100,23 +111,25 @@ class RentController extends Controller
     protected function store(Request $request)
     {
         //select2
-        $iduser = User::where('email','like','%' . request('name') . '%')->first()->id;
-        $idbuku = Book::where('book_title','like','%' . request('book_title') . '%')->first()->id;
+        $iduser = User::find($request->name);
+        $idbuku = Book::find($request->book_title);
         Rent::create([
-            'books_id' => $idbuku,
-            'users_id' => $iduser,
+            'books_id' => $idbuku->id,
+            'users_id' => $iduser->id,
         ]);
         //$iduser->bukus()->attach($idbuku);
         return redirect()->route('rent.index')->with('success','Pinjam has been created successfully.');
     }
-    public function edit(Rent $pinjam)
+    public function edit(Rent $rent)
     {
-        return view('admin.rent.edit',compact('pinjam'));
+        $user = User::all();
+        $book = Book::all();
+        return view('admin.rent.edit', compact('user', 'book'));
     }
     protected function update(Request $request, Rent $pinjam)
     {
-        $iduser = User::where('email','like','%' . request('email') . '%')->first()->id;
-        $idbuku = Book::where('book_title','like','%' . request('book_title') . '%')->first()->id;
+        $iduser = User::where('email','like','%' . request('name') . '%')->first();
+        $idbuku = Book::where('book_title','like','%' . request('book_title') . '%')->first();
         $request->validate([
             'books_id' => $idbuku,
             'users_id' => $iduser,
@@ -132,6 +145,8 @@ class RentController extends Controller
     protected function destroy($id)
     {
         $rent = Rent::find($id);
+        $user = User::find($rent->users_id);
+        Notification::send($user, new RentReject($rent));
         $success = $rent->delete();
         if($success)
             return redirect()->route('rent.index')->with('success','Pinjam has been deleted successfully');

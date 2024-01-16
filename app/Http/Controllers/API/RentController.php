@@ -22,7 +22,22 @@ class RentController extends BaseController
         //bikin status diketahui && relasi muncul di end point
         $userId = \Auth::user()->id;
         $rent = Rent::where('users_id', $userId)->get();
-    
+        /*if ($request->type == 'pending') {
+            $rent = $rent->whereNull('status')->whereNotNull('date_request');
+        } 
+        elseif ($request->type == 'renting'){
+            $rent = $rent->where('status', true)->whereNotNull('date_rent')->where('date_due', '>', Carbon::now());
+        }
+        elseif ($request->type == 'overdue'){
+            $rent = $rent->where('status', true)->where('date_due', '<', Carbon::now());
+        }
+        elseif ($request->type == 'finish'){
+            $rent = $rent->where('status', false)->whereNotNull('date_return');
+        }
+        else
+        {
+            $rent = $rent->whereNull('status')->whereNotNull('date_request');
+        }*/
         return $this->sendResponse(
             RentResource::collection($rent)->toArray($request),
             'Rent retrieved successfully.'

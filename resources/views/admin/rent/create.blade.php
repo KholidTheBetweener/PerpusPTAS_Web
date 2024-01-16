@@ -23,20 +23,14 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="form-group">
-                        <strong>Username:</strong>
+                        <strong>User:</strong>
                         <!-- change to select-->
-                        <select class="js-example-disabled-results">
-  <option value="one">First</option>
-  <option value="two" disabled="disabled">Second (disabled)</option>
-  <option value="three">Third</option>
-</select>
-                        <input list="user" name="name" class="form-control" placeholder="Email User">
-                            <datalist id="user">
-                                @foreach ($user as $user)
-                                <option value="{{ $user->email }}">
-                                @endforeach
-                            </datalist>
-                        @error('username')
+                        <select class="js-example-disabled-results form-control" list="user" name="name" placeholder="Email/Nama User">
+                            @foreach ($user as $user)
+                            <option value="{{ $user->id }}">{{ $user->email }}, {{ $user->name }} </option>
+                            @endforeach
+                        </select>
+                        @error('name')
                         <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
                         @enderror
                     </div>
@@ -45,12 +39,11 @@
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="form-group">
                         <strong>Buku:</strong>
-                        <input list="book" name="book_title" class="form-control" placeholder="Judul Buku">
-                            <datalist id="book">
-                                @foreach ($book as $book)
-                                <option value="{{ $book->book_title }}">
+                        <select class="js-example-disabled-results form-control" list="book" name="book_title" placeholder="Judul Buku">
+                            @foreach ($book as $book)
+                                <option value="{{ $book->id }}">{{ $book->book_title }}</option>
                                 @endforeach
-                            </datalist>
+                        </select>
                         @error('book_title')
                         <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
                         @enderror

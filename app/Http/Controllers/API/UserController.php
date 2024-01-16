@@ -18,7 +18,7 @@ class UserController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function isProfileComplete(): JsonRespone
+    public function isProfileComplete(): JsonResponse
     {
         $user = \Auth::user();
         $arraynull = [];

@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use App\Models\Rent;
 use App\Models\User;
 use App\Notifications\RentOverdue;
-
+use Illuminate\Notifications\Notification;
 class NotifyOverdue extends Command
 {
     /**
