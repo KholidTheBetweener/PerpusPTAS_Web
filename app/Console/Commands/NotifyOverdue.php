@@ -7,6 +7,7 @@ use App\Models\Rent;
 use App\Models\User;
 use App\Notifications\RentOverdue;
 use Illuminate\Notifications\Notification;
+use Carbon\Carbon;
 class NotifyOverdue extends Command
 {
     /**
@@ -29,10 +30,9 @@ class NotifyOverdue extends Command
     public function handle()
     {
         $rentOverdue=Rent::where('status', true)->where('date_due', '<', Carbon::now())->get();
-        foreach($rentOverdue as $p)
+        foreach($rentOverdue as $rent)
         {
-            $user = User::find($p->users_id);
-            Notification::send($users, new RentOverdue($rent));
+            User::find($rent->users_id)->notify(new RentOverdue($rent));
         }
     }
 }

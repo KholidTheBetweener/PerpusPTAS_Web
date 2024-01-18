@@ -43,8 +43,7 @@ class RentController extends Controller
         $rent->date_due = Carbon::now()->addWeeks(2);
         $rent->status = true;
         $rent->save();
-        $user = User::find($rent->users_id);
-        Notification::send($user, new RentApprove($rent));
+        User::find($rent->users_id)->notify(new RentApprove($rent));
         return redirect()->route('rent.index')->with('success','Peminjaman telah disetjui');
     }
     protected function return(Request $request, Rent $rent)
@@ -56,20 +55,17 @@ class RentController extends Controller
         $rent->date_return = Carbon::now();
         $rent->status = false;
         $rent->save();
-        $user = User::find($rent->users_id);
-        Notification::send($user, new RentReturn($rent));
+        User::find($rent->users_id)->notify(new RentReturn($rent));
         return redirect()->route('rent.index')->with('success','Buku Telah dikembalikan');
     }
     protected function alert(Request $request, Rent $rent)
     {
-        $user = User::find($rent->users_id);
-        Notification::send($user, new RentAlert($rent));
+        User::find($rent->users_id)->notify(new RentAlert($rent));
         return redirect()->route('rent.index')->with('success','Peringatan telat pengembalian telah dikirim');
     }
     protected function warning(Request $request, Rent $rent)
     {
-        $user = User::find($rent->users_id);
-        Notification::send($user, new RentAlert($rent));
+        User::find($rent->users_id)->notify(new RentAlert($rent));
         return redirect()->route('rent.index')->with('success','Peringatan telat pengembalian telah dikirim');
     }
     protected function index(Request $request)
@@ -145,8 +141,7 @@ class RentController extends Controller
     protected function destroy($id)
     {
         $rent = Rent::find($id);
-        $user = User::find($rent->users_id);
-        Notification::send($user, new RentReject($rent));
+        User::find($rent->users_id)->notify(new RentReject($rent));
         $success = $rent->delete();
         if($success)
             return redirect()->route('rent.index')->with('success','Pinjam has been deleted successfully');
