@@ -24,9 +24,9 @@ Route::controller(RegisterController::class)->group(function(){
 });
 Route::controller(BookController::class)->group(function(){
     Route::get('index', 'index');
+    Route::get('categories', [CategoriesController::class, 'index']);
 });
 Route::middleware('auth:sanctum')->group(function(){
-    Route::get('categories', [CategoriesController::class, 'index']);
     //Route::resource('users', UserController::class);
     Route::get('myProfile', [UserController::class, 'show']);
     Route::get('checkProfile', [UserController::class, 'isProfileComplete']);

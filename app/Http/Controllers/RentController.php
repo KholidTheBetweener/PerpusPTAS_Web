@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Book;
 use Carbon\Carbon;
 use Illuminate\Notifications\Notification;
+use Illuminate\Http\JsonResponse;
 use App\Notifications\RentAlert;
 use App\Notifications\RentApprove;
 use App\Notifications\RentReject;
@@ -19,7 +20,7 @@ class RentController extends Controller
 {
     protected function all()
     {
-        $rows = Rent::query()->paginate(5)->toArray(); // the rows will be in data key
+        $rows = Rent::query()->orderBy('updated_at', 'desc')->paginate(5); // the rows will be in data key
         $now = Carbon::now();
         return view('admin.rent.all', compact('rows', 'now'));
     }
@@ -29,9 +30,15 @@ class RentController extends Controller
     }
     protected function track(Request $request)
     {
-        $pinjam = Rent::where('book_code','like','%' . request('book_code') . '%')->first();
-        $pinjam->save();
-        return redirect()->route('rent.index')->with('success','Peminjaman Telah ditemukan');
+        $book = Book::where('book_code','like','%' . request('name') . '%')->orWhere('book_title','like','%' . request('name') . '%')->orWhere('barcode','like','%' . request('name') . '%')->first()->id;
+        $user = User::where('name','like','%' . request('name') . '%')->orWhere('phone','like','%' . request('name') . '%')->orWhere('email','like','%' . request('name') . '%')->first()->id;
+        if($user != NULL){
+            $rows = Rent::where('users_id', $user);
+        }
+        if($book != NULL){
+            $rows = Rent::where('books_id', $book);
+        }
+        return view('admin.rent.all', ['rows' => $rows]);
     }
     protected function approve(Request $request, Rent $rent)
     {

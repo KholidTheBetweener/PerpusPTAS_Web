@@ -13,7 +13,7 @@ class UserController extends Controller
 {
     protected function index()
     {
-        $user = User::orderBy('id')->paginate(5);
+        $user = User::orderBy('id')->orderBy('updated_at', 'desc')->paginate(5);
         return view('admin.user.index', compact('user'));
     }
     public function create()

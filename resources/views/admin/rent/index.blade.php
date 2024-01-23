@@ -153,6 +153,8 @@
                         <form action="{{ route('rent.destroy',$row['id']) }}" method="Post">
                                 <a class="btn btn-warning" href="{{ route('rent.edit',$row['id']) }}">Edit</a>
                                 @csrf
+                            </td>
+                            <td>
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger show-alert-delete-box">Hapus</button>
                             </form>
@@ -183,9 +185,11 @@
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Ya, data dihapus!'
             }).then((willDelete) => {
-                if (willDelete) {
+                if (willDelete.value) {
                     form.submit();
-                }
+                }else if(willDelete.dismiss == 'cancel'){
+                        
+                    }
             });
         });
         $(document).on('click', '.show-alert-approve-box', function(event){
@@ -203,9 +207,11 @@
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Ya, setujui permintaan!'
             }).then((willapprove) => {
-                if (willapprove) {
+                if (willapprove.value) {
                     form.submit();
-                }
+                }else if(willapprove.dismiss == 'cancel'){
+                        
+                    }
             });
         });
         $(document).on('click', '.show-alert-warning-box', function(event){
@@ -223,9 +229,11 @@
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Ya, peringati pengguna!'
             }).then((willwarning) => {
-                if (willwarning) {
-                    form.submit();
-                }
+                if(willwarning.value){
+                        form.submit();
+                    }else if(willwarning.dismiss == 'cancel'){
+                        
+                    }
             });
         });
         $(document).on('click', '.show-alert-done-box', function(event){
@@ -243,9 +251,11 @@
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes, finish reading it!'
             }).then((willdone) => {
-                if (willdone) {
+                if (willdone.value) {
                     form.submit();
-                }
+                }else if(willdone.dismiss == 'cancel'){
+                        
+                    }
             });
         });
     });

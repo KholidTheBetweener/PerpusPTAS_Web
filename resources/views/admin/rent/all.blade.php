@@ -38,7 +38,7 @@
                         {{ $row->book->book_title }}
                         </td>
                         <td>
-                        @if($row->status == NULL && $row->date_request != NULL)
+                        @if($row->status == NULL && $row->date_request != NULL && $row->date_rent == NULL)
                         Mengajukan Peminjaman Buku
                         @endif
                         @if($row->status == TRUE && $row->date_rent != NULL && $row->date_due > $now) 
@@ -55,7 +55,7 @@
                         <a class="btn btn-primary" href="{{ route('rent.show',$row['id']) }}">Detail</a>
                         </td>
                         <td>    
-                        @if($row->status == NULL && $row->date_request != NULL)
+                        @if($row->status == NULL && $row->date_request != NULL & $row->date_rent == NULL)
                             <form action="{{ route('rent.approve',$row['id']) }}" method="Post">
                                 @csrf
                                 <button type="submit" class="btn btn-success show-alert-approve-box" data-toggle="tooltip" title='approve'>Terima</button>
@@ -96,6 +96,8 @@
                         <form action="{{ route('rent.destroy',$row['id']) }}" method="Post">
                                 <a class="btn btn-warning" href="{{ route('rent.edit',$row['id']) }}">Edit</a>
                                 @csrf
+                            </td>
+                            <td>
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger show-alert-delete-box">Hapus</button>
                             </form>
@@ -106,4 +108,96 @@
             </tbody>
         </table>
     </div>
+    <script type="module">
+        $(function() {
+            $(document).on('click', '.show-alert-delete-box', function(event){
+                var form =  $(this).closest("form");
+    
+                event.preventDefault();
+                swal.fire({
+                    title: "Apa yakin mau menolak permintaan ini?",
+                    text: "Permintaan ini akan dihapus.",
+                    icon: "warning",
+                    type: "warning",
+                    //buttons: ["Cancel","Yes!"],
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, data dihapus!'
+                }).then((willDelete) => {
+                    if (willDelete.value) {
+                        form.submit();
+                    }else if(willDelete.dismiss == 'cancel'){
+                            
+                        }
+                });
+            });
+            $(document).on('click', '.show-alert-approve-box', function(event){
+                var form =  $(this).closest("form");
+    
+                event.preventDefault();
+                swal.fire({
+                    title: "Apa yakin ingin menyetujui permintaan ini?",
+                    text: "Menyetujui Buku yang ingin dipinjam pengguna",
+                    icon: "warning",
+                    type: "warning",
+                    //buttons: ["Cancel","Yes!"],
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, setujui permintaan!'
+                }).then((willapprove) => {
+                    if (willapprove.value) {
+                        form.submit();
+                    }else if(willapprove.dismiss == 'cancel'){
+                            
+                        }
+                });
+            });
+            $(document).on('click', '.show-alert-warning-box', function(event){
+                var form =  $(this).closest("form");
+    
+                event.preventDefault();
+                swal.fire({
+                    title: "Apa yakin ingin mengirim notifikasi peringatan ke pengguna?",
+                    text: "Kirim notifikasi peringatan ke pengguna",
+                    icon: "warning",
+                    type: "warning",
+                    //buttons: ["Cancel","Yes!"],
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, peringati pengguna!'
+                }).then((willwarning) => {
+                    if(willwarning.value){
+                            form.submit();
+                        }else if(willwarning.dismiss == 'cancel'){
+                            
+                        }
+                });
+            });
+            $(document).on('click', '.show-alert-done-box', function(event){
+                var form =  $(this).closest("form");
+    
+                event.preventDefault();
+                swal.fire({
+                    title: "Apa yaking pengguna ingin mengembalikan buku ini?",
+                    text: "Mengembalikan buku yang dipinjam pengguna",
+                    icon: "warning",
+                    type: "warning",
+                    //buttons: ["Cancel","Yes!"],
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, finish reading it!'
+                }).then((willdone) => {
+                    if (willdone.value) {
+                        form.submit();
+                    }else if(willdone.dismiss == 'cancel'){
+                            
+                        }
+                });
+            });
+        });
+    </script>
 @endsection

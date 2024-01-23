@@ -49,7 +49,7 @@ Route::get('/admin/dashboard',function(){
 
 Route::get('/admin/rent/all',[RentController::class,'all'])->middleware('auth:admin')->name('rent.record');
 Route::get('/admin/rent/search',[RentController::class,'search'])->middleware('auth:admin')->name('rent.search');
-Route::post('/admin/rent/track',[RentController::class,'track'])->middleware('auth:admin')->name('rent.track');
+Route::get('/admin/rent/track',[RentController::class,'track'])->middleware('auth:admin')->name('rent.track');
 Route::post('/admin/user/photo/{user}',[UserController::class,'photo'])->middleware('auth:admin')->name('user.photo');
 Route::post('/admin/book/cover/{book}',[BookController::class,'cover'])->middleware('auth:admin')->name('book.cover');
 Route::post('/admin/book/barcode/{book}',[BookController::class,'barcode'])->middleware('auth:admin')->name('book.barcode');

@@ -12,7 +12,7 @@ class BookController extends Controller
 {
     protected function index()
     {
-        $buku = Book::orderBy('id')->paginate(5);
+        $buku = Book::orderBy('id')->orderBy('updated_at', 'desc')->paginate(5);
         return view('admin.book.index', compact('buku'));
     }
     //buat insert buku banyak lewat excel
