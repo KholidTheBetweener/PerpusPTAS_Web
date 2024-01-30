@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\RentController;
 use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\NotificationController;
 use App\Models\Admin;
 use App\Models\User;
 use App\Models\Book;
@@ -41,10 +42,12 @@ Route::get('/admin/dashboard',function(){
     $book = Book::count();
     $apply = Rent::whereNull('status')->whereNotNull('date_request')->count();
     $rent = Rent::where('status', true)->whereNotNull('date_rent')->count();
-    $due = Rent::where('date_due', '>', Carbon::now())->count();    
-    return view('admin', compact('admin', 'user', 'book', 'apply', 'rent', 'due'));
+    $due = Rent::where('date_due', '<', Carbon::now())->where('status', true)->count();
+    $notifications = auth()->user()->unreadNotifications;    
+    return view('admin', compact('admin', 'user', 'book', 'apply', 'rent', 'due', 'notifications'));
 })->middleware('auth:admin')->name('admin.dashboard');
-
+//notify
+Route::get('/send-notification', [NotificationController::class, 'sendNotification']);
 //Admin Resource
 
 Route::get('/admin/rent/all',[RentController::class,'all'])->middleware('auth:admin')->name('rent.record');
@@ -57,6 +60,8 @@ Route::post('/admin/rent/approve/{rent}',[RentController::class,'approve'])->mid
 Route::post('/admin/rent/alert/{rent}',[RentController::class,'alert'])->middleware('auth:admin')->name('rent.alert');
 Route::post('/admin/rent/return/{rent}',[RentController::class,'return'])->middleware('auth:admin')->name('rent.return');
 Route::post('/admin/rent/warning/{rent}',[RentController::class,'warning'])->middleware('auth:admin')->name('rent.warning');
+Route::get('/admin/user/search',[UserController::class,'search'])->middleware('auth:admin')->name('user.search');
+Route::get('/admin/book/search',[BookController::class,'search'])->middleware('auth:admin')->name('book.search');
 Route::resource('/admin/admin',AdminController::class)->middleware('auth:admin');
 Route::resource('/admin/user',UserController::class)->middleware('auth:admin');
 Route::resource('/admin/book',BookController::class)->middleware('auth:admin');

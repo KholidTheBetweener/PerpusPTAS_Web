@@ -10,6 +10,12 @@ use App\Models\Categories;
 
 class BookController extends Controller
 {
+    public function search(Request $request)
+        {
+            $books = Book::where('book_title','like','%'.$request->q.'%')->get();
+            return response()->json($books, 200);
+
+        }
     protected function index()
     {
         $buku = Book::orderBy('id')->orderBy('updated_at', 'desc')->paginate(5);
@@ -78,7 +84,7 @@ class BookController extends Controller
         $book->save();
         return redirect()->route('book.show', $book->id)->with('success','Buku Has Been updated successfully');
     }
-    protected function update(Request $request, Book $buku)
+    protected function update(Request $request, Book $book)
     {
         $request->validate([
             'book_code' => 'required',
@@ -97,12 +103,22 @@ class BookController extends Controller
             $bookCover->move($destinationPath, $profileImage);
             $input['book_cover'] = "book_cover/".$profileImage;
         }
-        $buku->fill($input->post())->save();
+        $book->fill([
+            'book_code'     => $input['book_code'],
+            'book_title'   => $input['book_title'],
+            'author'     => $input['author'],
+            'category'     => $input['category'],
+            'publisher'     => $input['publisher'],
+            'stock'     => $input['stock'],
+            'book_cover'     => $input['book_cover'],
+            'book_desc'     => $input['book_desc'],
+            'barcode'     => $input['barcode'],
+        ])->save();
         return redirect()->route('book.index')->with('success','Buku Has Been updated successfully');
     }
-    protected function destroy(Book $buku)
+    protected function destroy(Book $book)
     {
-        $buku->delete();
+        $book->delete();
         return redirect()->route('book.index')->with('success','Buku has been deleted successfully');
     }
 }

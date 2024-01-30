@@ -10,7 +10,7 @@
                 <div class="pull-right mb-2">
                 <a class="btn btn-success" href="{{ route('rent.create') }}"> Peminjaman Baru</a>
                     <a class="btn btn-primary" href="{{ route('rent.index')}}"> Peminjaman Aktif</a>
-                    <a class="btn btn-warning" href="{{ route('rent.search')}}"> Pencarian Buku</a>
+                    <a class="btn btn-warning" href="{{ route('rent.search')}}"> Pencarian Peminjaman</a>
                 </div>
             </div>
         </div>

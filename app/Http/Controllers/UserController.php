@@ -8,9 +8,22 @@ use App\Models\Book;
 use App\Models\Rent;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\JsonResponse;
 
 class UserController extends Controller
 {
+    public function search(Request $request): JsonResponse
+        {
+            $data = [];
+    
+            if($request->filled('q')){
+                $data = User::select("name", "id")
+                            ->where('name', 'LIKE', '%'. $request->get('q'). '%')
+                            ->get();
+            }
+         
+            return response()->json($data);
+        }
     protected function index()
     {
         $user = User::orderBy('id')->orderBy('updated_at', 'desc')->paginate(5);

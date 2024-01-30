@@ -37,7 +37,9 @@ class BookController extends BaseController
         if (is_null($book)) {
             return $this->sendError('Book not found.');
         }
-   
+        if ($book->stock <= 0) {
+            return $this->sendResponse(new BookResource($book), "Book can't be rented");
+        }
         return $this->sendResponse(new BookResource($book), 'book retrieved successfully.');
     }
     

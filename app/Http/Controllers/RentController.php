@@ -30,15 +30,24 @@ class RentController extends Controller
     }
     protected function track(Request $request)
     {
-        $book = Book::where('book_code','like','%' . request('name') . '%')->orWhere('book_title','like','%' . request('name') . '%')->orWhere('barcode','like','%' . request('name') . '%')->first()->id;
-        $user = User::where('name','like','%' . request('name') . '%')->orWhere('phone','like','%' . request('name') . '%')->orWhere('email','like','%' . request('name') . '%')->first()->id;
-        if($user != NULL){
-            $rows = Rent::where('users_id', $user);
-        }
-        if($book != NULL){
-            $rows = Rent::where('books_id', $book);
-        }
-        return view('admin.rent.all', ['rows' => $rows]);
+        //$rents = Rent::paginate(5); // Table-1
+        //$books = Book::all();   // Table-2
+        //$users = User::all(); 
+        //$query = $request->name;
+        $rows = Rent::query()
+        ->join('books', 'books.id', 'rents.books_id')
+        ->join('users', 'users.id', 'rents.users_id') //just guessing here
+        ->where(function($query) use ($request) {
+            $query->where('books.book_code','like',"%{$request->name}%")
+            ->orWhere('books.book_title','like',"%{$request->name}%")
+            ->orWhere('books.barcode','like',"%{$request->name}%")
+            ->orWhere('users.name','like',"%{$request->name}%")
+            ->orWhere('users.phone','like',"%{$request->name}%")
+            ->orWhere('users.email','like',"%{$request->name}%");
+        })->orderBy('rents.created_at', 'desc')
+        ->paginate(5);
+        $now = Carbon::now();
+        return view('admin.rent.all', compact('rows', 'now'));
     }
     protected function approve(Request $request, Rent $rent)
     {
@@ -50,7 +59,8 @@ class RentController extends Controller
         $rent->date_due = Carbon::now()->addWeeks(2);
         $rent->status = true;
         $rent->save();
-        User::find($rent->users_id)->notify(new RentApprove($rent));
+        $user = User::find($rent->users_id);
+        $user->notify(new RentApprove($rent));
         return redirect()->route('rent.index')->with('success','Peminjaman telah disetjui');
     }
     protected function return(Request $request, Rent $rent)

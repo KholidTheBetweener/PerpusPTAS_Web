@@ -1,6 +1,7 @@
 @extends('layouts.dash')
 @section('title', 'Peminjaman Baru')
 @section('content')
+@stack('scripts')
 <script src="{{ asset('js/app.js') }}"></script>
     <div class="container mt-2">
         <div class="row">
@@ -25,9 +26,9 @@
                     <div class="form-group">
                         <strong>User:</strong>
                         <!-- change to select-->
-                        <select class="js-example-disabled-results form-control" list="user" name="name" placeholder="Email/Nama User">
+                        <select name="name" id="user" class="form-control">
                             @foreach ($user as $user)
-                            <option value="{{ $user->id }}">{{ $user->email }}, {{ $user->name }} </option>
+                            <option value="{{ $user->id }}">{{ $user->name }}</option>
                             @endforeach
                         </select>
                         @error('name')
@@ -53,4 +54,28 @@
             </div>
         </form>
     </div>
+    <script type="text/javascript">
+    var path = "{{ route('user.search') }}";
+  
+    $('#user').select2({
+        placeholder: 'Select an user',
+        ajax: {
+          url: path,
+          dataType: 'json',
+          delay: 250,
+          processResults: function (data) {
+            return {
+              results:  $.map(data, function (item) {
+                    return {
+                        text: item.name,
+                        id: item.id
+                    }
+                })
+            };
+          },
+          cache: true
+        }
+      });
+  
+</script>
 @endsection
