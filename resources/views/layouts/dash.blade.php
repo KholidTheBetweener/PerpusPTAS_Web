@@ -6,7 +6,7 @@
         @include('partials.dashHead')
     </head>
     <style>
-    li {
+li {
         list-style: none;
         margin: 15px 0 15px 0;
     }

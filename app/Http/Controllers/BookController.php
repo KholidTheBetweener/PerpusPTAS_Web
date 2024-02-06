@@ -7,13 +7,19 @@ use App\Providers\RouteServiceProvider;
 use App\Models\Book;
 use App\Models\Rent;
 use App\Models\Categories;
-
+use Illuminate\Http\JsonResponse;
 class BookController extends Controller
 {
-    public function search(Request $request)
+    public function search(Request $request): JsonResponse
         {
-            $books = Book::where('book_title','like','%'.$request->q.'%')->get();
-            return response()->json($books, 200);
+            $data = [];
+    
+            if($request->filled('q')){
+                $data = Book::select("book_title", "id")
+                            ->where('book_title', 'LIKE', '%'. $request->get('q'). '%')
+                            ->get();
+            }
+            return response()->json($data);
 
         }
     protected function index()

@@ -39,7 +39,7 @@ class RentReject extends Notification
     {
             return [
                 'title' => 'Peminjaman Buku Ditolak',
-                'message' => "Peminjaman Buku anda ditolak",
+                'message' => "Pengajuan Peminjaman Buku {$this->rent->book->book_title} oleh {$this->rent->user->name} ditolak",
                 'type' => 'rent',
                 'id' => $this->rent->id,
             ];

@@ -49,6 +49,9 @@
                     <th>
                     @if(request('type') == 'pending' || request('type') == null)
                     Tanggal Pengajuan 
+                    </th>
+                    <th>
+                    Stock Tersedia
                     @endif
                     @if(request('type') == 'renting') 
                     Tanggal Pinjam
@@ -80,6 +83,9 @@
                         <td>
                         @if(request('type') == 'pending' || request('type') == null)
                         {{ $row->date_request }}
+                        </td>
+                        <td>
+                            {{ $row->book->stock }}
                         @endif
                         @if(request('type') == 'renting') 
                         {{ $row->date_rent }}
@@ -132,7 +138,7 @@
                             </form>
                         </td>
                         <td>
-                        <form action="{{ route('rent.alert',$row['id']) }}" method="Post">
+                        <form action="{{ route('rent.alert',$row['id']) }}" method="get">
                         @csrf
                                 <button type="submit" class="btn btn-warning show-alert-warning-box" title='warning'>Peringati</button>
                         </form>
@@ -144,7 +150,7 @@
                             </form>
                         </td>
                         <td>
-                        <form action="{{ route('rent.warning',$row['id']) }}" method="Post">
+                        <form action="{{ route('rent.warning',$row['id']) }}" method="get">
                         @csrf
                                 <button type="submit" class="btn btn-danger show-alert-warning-box" title='warning'>Peringatan</button>
                             </form> 

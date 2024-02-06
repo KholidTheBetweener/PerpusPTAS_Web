@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Rent;
+use App\Models\Book;
 use Validator;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Http\Resources\RentResource;
@@ -22,7 +23,7 @@ class RentController extends BaseController
         //bikin status diketahui && relasi muncul di end point
         $userId = \Auth::user()->id;
         $rent = Rent::where('users_id', $userId)->get();
-        /*if ($request->type == 'pending') {
+        if ($request->type == 'pending') {
             $rent = $rent->whereNull('status')->whereNotNull('date_request');
         } 
         elseif ($request->type == 'renting'){
@@ -37,7 +38,7 @@ class RentController extends BaseController
         else
         {
             $rent = $rent->whereNull('status')->whereNotNull('date_request');
-        }*/
+        }
         return $this->sendResponse(
             RentResource::collection($rent)->toArray($request),
             'Rent retrieved successfully.'
@@ -62,9 +63,12 @@ class RentController extends BaseController
         $validator = Validator::make($input, [
             'books_id' => 'required'
         ]);
-   
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
+        }
+        $book = Book::find($input['books_id']);
+        if ($book->stock <= 0) {
+            return $this->sendError('Stock Buku Sudah Habis.', $book, 428);
         }
         $user = \Auth::user();
         $arraynull = [];

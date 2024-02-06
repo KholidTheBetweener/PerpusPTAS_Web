@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Notifications\Notification;
 use Illuminate\Http\JsonResponse;
 use App\Notifications\RentAlert;
+use App\Notifications\RentOverdue;
 use App\Notifications\RentApprove;
 use App\Notifications\RentReject;
 use App\Notifications\RentReturn;
@@ -61,6 +62,9 @@ class RentController extends Controller
         $rent->save();
         $user = User::find($rent->users_id);
         $user->notify(new RentApprove($rent));
+        if ($book->stock <= 0) {
+            return redirect()->route('rent.denied', $book->id);
+        }
         return redirect()->route('rent.index')->with('success','Peminjaman telah disetjui');
     }
     protected function return(Request $request, Rent $rent)
@@ -82,7 +86,7 @@ class RentController extends Controller
     }
     protected function warning(Request $request, Rent $rent)
     {
-        User::find($rent->users_id)->notify(new RentAlert($rent));
+        User::find($rent->users_id)->notify(new RentOverdue($rent));
         return redirect()->route('rent.index')->with('success','Peringatan telat pengembalian telah dikirim');
     }
     protected function index(Request $request)
@@ -117,8 +121,8 @@ class RentController extends Controller
     }
     public function create()
     {
-        $user = User::all();
-        $book = Book::all();
+        $user = User::pluck('name','id')->toArray();
+        $book = Book::pluck('book_title','id')->toArray();
         return view('admin.rent.create', compact('user', 'book'));
     }
     protected function store(Request $request)
@@ -162,6 +166,16 @@ class RentController extends Controller
         $success = $rent->delete();
         if($success)
             return redirect()->route('rent.index')->with('success','Pinjam has been deleted successfully');
+        else
+            return redirect()->route('rent.index')->with('success','Pinjam has fail to delete');
+    }
+    protected function denied($id)
+    {
+        $rent = Rent::where('books_id', $id);
+        User::find($rent->users_id)->notify(new RentReject($rent));
+        $success = $rent->delete();
+        if($success)
+            return redirect()->route('rent.index')->with('success','Peminjaman telah disetujui dan stock habis maka lainnya di tolak');
         else
             return redirect()->route('rent.index')->with('success','Pinjam has fail to delete');
     }

@@ -19,6 +19,7 @@ class UserController extends Controller
             if($request->filled('q')){
                 $data = User::select("name", "id")
                             ->where('name', 'LIKE', '%'. $request->get('q'). '%')
+                            ->orWhere('email', 'LIKE', '%'. $request->get('q'). '%')
                             ->get();
             }
          
@@ -40,6 +41,7 @@ class UserController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+        //event(new Registered($user));
         return redirect()->route('user.index')->with('success','User has been created successfully.');
 
     }

@@ -40,7 +40,7 @@ class NewUserNotification extends Notification
                 'title' => 'Ada Akun Pengguna Baru',
                 'message' => "pengguna aplikasi {$this->user->name} telah dibuat",
                 'type' => 'user',
-                'id' => $this->rent->id,
+                'id' => $this->user->id,
             ];
     }
 }

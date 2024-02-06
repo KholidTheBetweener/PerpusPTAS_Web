@@ -26,9 +26,9 @@
                     <div class="form-group">
                         <strong>User:</strong>
                         <!-- change to select-->
-                        <select name="name" id="user" class="form-control">
-                            @foreach ($user as $user)
-                            <option value="{{ $user->id }}">{{ $user->name }}</option>
+                        <select name="name" id="user" class="form-control" placeholder="Nama Pengguna" style="width:102%;">
+                            @foreach ($user as $key => $user)
+                            <option value="{{ $key }}">{{ $user }}</option>
                             @endforeach
                         </select>
                         @error('name')
@@ -36,27 +36,26 @@
                         @enderror
                     </div>
                 </div>
-                
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="form-group">
                         <strong>Buku:</strong>
-                        <select class="js-example-disabled-results form-control" list="book" name="book_title" placeholder="Judul Buku">
-                            @foreach ($book as $book)
-                                <option value="{{ $book->id }}">{{ $book->book_title }}</option>
-                                @endforeach
+                        <select class="form-control" id="book" name="book_title" placeholder="Judul Buku" style="width:102%;">
+                            @foreach ($book as $key => $book)
+                            <option value="{{ $key }}">{{ $book }}</option>
+                            @endforeach
                         </select>
                         @error('book_title')
                         <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
+                &nbsp;
                 <button type="submit" class="btn btn-primary ml-3">Submit</button>
             </div>
         </form>
     </div>
-    <script type="text/javascript">
+    <script type="module">
     var path = "{{ route('user.search') }}";
-  
     $('#user').select2({
         placeholder: 'Select an user',
         ajax: {
@@ -76,6 +75,26 @@
           cache: true
         }
       });
-  
+      
+    var path2 = "{{ route('book.search') }}";
+      $('#book').select2({
+        placeholder: 'Select a book',
+        ajax: {
+          url: path2,
+          dataType: 'json',
+          delay: 250,
+          processResults: function (data) {
+            return {
+              results:  $.map(data, function (item) {
+                    return {
+                        text: item.book_title,
+                        id: item.id
+                    }
+                })
+            };
+          },
+          cache: true
+        }
+      });
 </script>
 @endsection

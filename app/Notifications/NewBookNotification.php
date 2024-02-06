@@ -6,18 +6,17 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use App\Models\Rent;
-
-class RentAlert extends Notification
+use App\Models\Book;
+class NewBookNotification extends Notification
 {
     use Queueable;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct(Rent $rent)
+    public function __construct(Book $book)
     {
-        $this->rent = $rent;
+        $this->book = $book;
     }
 
     /**
@@ -38,10 +37,10 @@ class RentAlert extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'title' => 'Waktu Peminjaman Hampir Habis',
-            'message' => "Buku {$this->rent->book->book_title} dipinjam oleh {$this->rent->user->name} akan melewati batas waktu peminjaman pada {$this->rent->date_due}",
-            'type' => 'rent',
-            'id' => $this->rent->id,
+            'title' => 'Ada Buku Baru Di Perpustakaan',
+            'message' => "Ada Buku Baru Berjudul {$this->book->book_title} Di Perpustakaan",
+            'type' => 'book',
+            'id' => $this->book->id,
         ];
     }
 }
