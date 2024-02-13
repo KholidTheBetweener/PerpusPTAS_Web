@@ -54,13 +54,13 @@ Route::get('/admin/rent/all',[RentController::class,'all'])->middleware('auth:ad
 Route::get('/admin/rent/search',[RentController::class,'search'])->middleware('auth:admin')->name('rent.search');
 Route::get('/admin/rent/track',[RentController::class,'track'])->middleware('auth:admin')->name('rent.track');
 Route::post('/admin/user/photo/{user}',[UserController::class,'photo'])->middleware('auth:admin')->name('user.photo');
+Route::post('/import-excel', [BookController::class,'import'])->middleware('auth:admin')->name('book.import');
 Route::post('/admin/book/cover/{book}',[BookController::class,'cover'])->middleware('auth:admin')->name('book.cover');
 Route::post('/admin/book/barcode/{book}',[BookController::class,'barcode'])->middleware('auth:admin')->name('book.barcode');
 Route::post('/admin/rent/approve/{rent}',[RentController::class,'approve'])->middleware('auth:admin')->name('rent.approve');
 Route::get('/admin/rent/alert/{rent}',[RentController::class,'alert'])->middleware('auth:admin')->name('rent.alert');
 Route::post('/admin/rent/return/{rent}',[RentController::class,'return'])->middleware('auth:admin')->name('rent.return');
 Route::get('/admin/rent/warning/{rent}',[RentController::class,'warning'])->middleware('auth:admin')->name('rent.warning');
-//Route::get('/admin/rent/denied/{id}',[RentController::class,'denied'])->middleware('auth:admin')->name('rent.denied');
 Route::get('/admin/user/search',[UserController::class,'search'])->middleware('auth:admin')->name('user.search');
 Route::get('/admin/book/search',[BookController::class,'search'])->middleware('auth:admin')->name('book.search');
 Route::resource('/admin/admin',AdminController::class)->middleware('auth:admin');

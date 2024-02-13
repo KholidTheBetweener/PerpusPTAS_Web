@@ -11,7 +11,8 @@ class NotificationController extends BaseController
     public function index(): JsonResponse
     {
         $user = \Auth::user();
-        $notifications = $user->notifications;
+        $notifications = $user->unreadNotifications;
         return $this->sendResponse($notifications, 'Notifikasi Telah diambil.');
     }
+    //read at edit request
 }

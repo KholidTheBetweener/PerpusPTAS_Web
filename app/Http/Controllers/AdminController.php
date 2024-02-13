@@ -15,8 +15,8 @@ class AdminController extends Controller
 {
     protected function index()
     {
-        $admin = Admin::orderBy('id')->orderBy('updated_at', 'desc')->paginate(5);
-        return view('admin.admin.index', compact('admin'));
+        $admins = Admin::orderBy('id')->orderBy('updated_at', 'desc')->paginate(10);
+        return view('admin.admin.index', compact('admins'));
     }
     public function create()
     {

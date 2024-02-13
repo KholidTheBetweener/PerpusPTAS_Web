@@ -171,6 +171,7 @@
                 @endif
             </tbody>
         </table>
+        {{ $rows->links() }}
   </div>
 <!-- Tabs content -->
     </div>
