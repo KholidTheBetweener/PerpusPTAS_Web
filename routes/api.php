@@ -7,6 +7,7 @@ use App\Http\Controllers\API\BookController;
 use App\Http\Controllers\API\RentController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\CategoriesController;
+use App\Http\Controllers\API\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,7 @@ Route::controller(BookController::class)->group(function(){
 });
 Route::middleware('auth:sanctum')->group(function(){
     //Route::resource('users', UserController::class);
+    Route::get('notifications', [NotificationController::class, 'index']);
     Route::get('myProfile', [UserController::class, 'show']);
     Route::get('checkProfile', [UserController::class, 'isProfileComplete']);
     Route::post('myProfile', [UserController::class, 'update']);

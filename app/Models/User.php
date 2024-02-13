@@ -55,6 +55,6 @@ class User extends Authenticatable
     ];
     public function getNameEmailAttribute()
     {
-        return $this->attributes['name'] . ', ' .$this->attributes['email'];
+        return $this->attributes['name'] . ' (' .$this->attributes['email']. ')';
     }
 }

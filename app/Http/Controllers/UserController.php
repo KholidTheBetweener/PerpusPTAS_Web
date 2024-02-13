@@ -16,10 +16,9 @@ class UserController extends Controller
             $data = [];
     
             if($request->filled('q')){
-                $data = User::select("name", "id")
-                            ->where('name', 'LIKE', '%'. $request->get('q'). '%')
+                $data = User::where('name', 'LIKE', '%'. $request->get('q'). '%')
                             ->orWhere('email', 'LIKE', '%'. $request->get('q'). '%')
-                            ->limit(10)->get();
+                            ->limit(10)->get()->append('name_email');
             }
          
             return response()->json($data);

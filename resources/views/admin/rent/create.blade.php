@@ -66,7 +66,7 @@
             return {
               results:  $.map(data, function (item) {
                     return {
-                        text: item.name,
+                        text: item.name_email,
                         id: item.id
                     }
                 })

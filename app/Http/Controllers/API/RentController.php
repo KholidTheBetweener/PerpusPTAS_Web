@@ -10,6 +10,7 @@ use Validator;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Http\Resources\RentResource;
 use Illuminate\Http\JsonResponse;
+use Carbon\Carbon;
 
 class RentController extends BaseController
 {
@@ -40,7 +41,7 @@ class RentController extends BaseController
             $rent = $rent->whereNull('status')->whereNotNull('date_request');
         }
         return $this->sendResponse(
-            RentResource::collection($rent)->toArray($request),
+            RentResource::collection($rent)->values()->toArray($request),
             'Rent retrieved successfully.'
         );
     }
