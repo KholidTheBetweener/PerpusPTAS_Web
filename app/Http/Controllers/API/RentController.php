@@ -118,10 +118,10 @@ class RentController extends BaseController
         $rent = Rent::find($id);
   
         if (is_null($rent)) {
-            return $this->sendError('Product not found.');
+            return $this->sendError('Rent not found.');
         }
    
-        return $this->sendResponse(new RentResource($rent), 'Product retrieved successfully.');
+        return $this->sendResponse(new RentResource($rent), 'Rent retrieved successfully.');
     }
 
     /**
@@ -135,6 +135,6 @@ class RentController extends BaseController
         //soft-delete
         $rent->delete();
    
-        return $this->sendResponse([], 'Product deleted successfully.');
+        return $this->sendResponse([], 'Rent deleted successfully.');
     }
 }

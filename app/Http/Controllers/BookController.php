@@ -17,7 +17,7 @@ class BookController extends Controller
             if($request->filled('q')){
                 $data = Book::select("book_title", "id")
                             ->where('book_title', 'LIKE', '%'. $request->get('q'). '%')
-                            ->get();
+                            ->limit(10)->get();
             }
             return response()->json($data);
 

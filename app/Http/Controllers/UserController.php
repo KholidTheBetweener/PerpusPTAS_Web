@@ -9,7 +9,6 @@ use App\Models\Rent;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\JsonResponse;
-
 class UserController extends Controller
 {
     public function search(Request $request): JsonResponse
@@ -20,7 +19,7 @@ class UserController extends Controller
                 $data = User::select("name", "id")
                             ->where('name', 'LIKE', '%'. $request->get('q'). '%')
                             ->orWhere('email', 'LIKE', '%'. $request->get('q'). '%')
-                            ->get();
+                            ->limit(10)->get();
             }
          
             return response()->json($data);

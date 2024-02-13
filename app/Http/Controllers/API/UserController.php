@@ -127,7 +127,7 @@ class UserController extends BaseController
         $user->component = $input['component'];
         $user->save();
    
-        return $this->sendResponse(new UserResource($user), 'Product updated successfully.');
+        return $this->sendResponse(new UserResource($user), 'Rent updated successfully.');
     }
    
 }

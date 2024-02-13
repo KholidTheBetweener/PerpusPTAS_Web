@@ -62,10 +62,10 @@ class RentController extends Controller
         $rent->save();
         $user = User::find($rent->users_id);
         $user->notify(new RentApprove($rent));
-        if ($book->stock <= 0) {
+        if ($book->stock <= 0) 
             return redirect()->route('rent.denied', $book->id);
-        }
-        return redirect()->route('rent.index')->with('success','Peminjaman telah disetjui');
+        else
+            return redirect()->route('rent.index')->with('success','Peminjaman telah disetjui');
     }
     protected function return(Request $request, Rent $rent)
     {
@@ -171,9 +171,10 @@ class RentController extends Controller
     }
     protected function denied($id)
     {
-        $rent = Rent::where('books_id', $id);
-        User::find($rent->users_id)->notify(new RentReject($rent));
-        $success = $rent->delete();
+        $rent = Rent::where('books_id', $id)->whereNull('status');
+        foreach($rent as $rent)
+        {User::find($rent->users_id)->notify(new RentReject($rent));
+        $success = $rent->delete();}
         if($success)
             return redirect()->route('rent.index')->with('success','Peminjaman telah disetujui dan stock habis maka lainnya di tolak');
         else
