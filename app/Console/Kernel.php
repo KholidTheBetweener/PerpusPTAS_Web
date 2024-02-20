@@ -15,7 +15,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('rent:notify-overdue')->daily();
+        $schedule->command('rent:notify-overdue')->dailyAt('07:00');
         // $schedule->command('inspire')->hourly();
     }
 

@@ -30,6 +30,7 @@ Route::controller(BookController::class)->group(function(){
 Route::middleware('auth:sanctum')->group(function(){
     //Route::resource('users', UserController::class);
     Route::get('notifications', [NotificationController::class, 'index']);
+    Route::get('notifications/{id}', [NotificationController::class, 'show']);
     Route::get('myProfile', [UserController::class, 'show']);
     Route::get('checkProfile', [UserController::class, 'isProfileComplete']);
     Route::post('myProfile', [UserController::class, 'update']);
