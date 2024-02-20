@@ -8,6 +8,7 @@ use App\Models\Book;
 use App\Models\Rent;
 use App\Models\Categories;
 use Illuminate\Http\JsonResponse;
+use Excel;
 class BookController extends Controller
 {
     public function search(Request $request): JsonResponse
@@ -22,10 +23,25 @@ class BookController extends Controller
             return response()->json($data);
 
         }
+        public function import(Request $request)
+        {
+            // Validate the uploaded file
+            $request->validate([
+                'file' => 'required|mimes:xlsx,xls',
+            ]);
+     
+            // Get the uploaded file
+            $file = $request->file('file');
+     
+            // Process the Excel file
+            Excel::import(new Book, $file);
+     
+            return redirect()->back()->with('success', 'Excel file imported successfully!');
+        }
     protected function index()
     {
-        $buku = Book::orderBy('id')->orderBy('updated_at', 'desc')->paginate(5);
-        return view('admin.book.index', compact('buku'));
+        $books = Book::orderBy('id')->orderBy('updated_at', 'desc')->paginate(10);
+        return view('admin.book.index', compact('books'));
     }
     //buat insert buku banyak lewat excel
     public function create()

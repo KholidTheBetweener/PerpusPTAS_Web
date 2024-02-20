@@ -24,4 +24,5 @@ class NotificationController extends BaseController
             return $this->sendResponse(new NotificationResource($notification), 'Notifikasi Telah dibaca.');
         }
     }
+    //read at edit request
 }

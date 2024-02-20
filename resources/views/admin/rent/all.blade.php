@@ -107,6 +107,7 @@
                 @endforeach
             </tbody>
         </table>
+        {{ $rows->links() }}
     </div>
     <script type="module">
         $(function() {

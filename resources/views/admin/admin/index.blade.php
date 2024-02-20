@@ -26,7 +26,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($admin as $admin)
+                @foreach ($admins as $admin)
                     <tr>
                         <td>{{ $admin->email }}</td>
                         <td>{{ $admin->username }}</td>
@@ -42,5 +42,7 @@
                     @endforeach
             </tbody>
         </table>
+        
+{{ $admins->links() }}
     </div>
 @endsection

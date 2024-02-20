@@ -10,6 +10,14 @@
                 <div class="pull-right mb-2">
                     <a class="btn btn-success" href="{{ route('book.create') }}"> Masukkan Buku Baru</a>
                     <a class="btn btn-warning" href="{{ route('categories.index') }}"> List Kategori</a>
+                    <form action="{{ route('book.import') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="form-group">
+                            <label for="file">Choose Excel File</label>
+                            <input type="file" name="file" id="file" class="form-control">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Import</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -29,7 +37,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($buku as $buku)
+                @foreach ($books as $buku)
                     <tr>
                         <td><img src="/{{ $buku->book_cover }}" width="100px"></td>
                         <td>{{ $buku->book_title }}</td>
@@ -48,5 +56,6 @@
                     @endforeach
             </tbody>
         </table>
+        {{ $books->links() }}
     </div>
 @endsection

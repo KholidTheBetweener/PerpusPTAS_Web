@@ -21,7 +21,7 @@ class RentController extends Controller
 {
     protected function all()
     {
-        $rows = Rent::query()->orderBy('updated_at', 'desc')->paginate(5); // the rows will be in data key
+        $rows = Rent::query()->orderBy('updated_at', 'desc')->paginate(10); // the rows will be in data key
         $now = Carbon::now();
         return view('admin.rent.all', compact('rows', 'now'));
     }
@@ -46,7 +46,7 @@ class RentController extends Controller
             ->orWhere('users.phone','like',"%{$request->name}%")
             ->orWhere('users.email','like',"%{$request->name}%");
         })->orderBy('rents.created_at', 'desc')
-        ->paginate(5);
+        ->paginate(10);
         $now = Carbon::now();
         return view('admin.rent.all', compact('rows', 'now'));
     }
@@ -62,10 +62,19 @@ class RentController extends Controller
         $rent->save();
         $user = User::find($rent->users_id);
         $user->notify(new RentApprove($rent));
-        if ($book->stock <= 0) 
-            return redirect()->route('rent.index');
+        if ($book->stock = 0 || $book->stock < 0){
+            $dels = Rent::where('books_id', $book->id)->whereNull('status');
+            foreach($dels as $del)
+            {
+            User::find($del->users_id)->notify(new RentReject($del));
+            $del->delete();
+            } 
+            return redirect()->route('rent.index')->with('success','Peminjaman telah disetujui dan pengajuan peminjaman untuk buku yang sama ditolak');
+        }
         else
-            return redirect()->route('rent.index')->with('success','Peminjaman telah disetjui');
+            {
+                return redirect()->route('rent.index')->with('success','Peminjaman telah disetujui');
+            }
     }
     protected function return(Request $request, Rent $rent)
     {
@@ -109,7 +118,7 @@ class RentController extends Controller
         {
             $query = $query->whereNull('status')->whereNotNull('date_request');
         }
-        $rows = $query->orderBy('updated_at', 'desc')->paginate(5);
+        $rows = $query->orderBy('updated_at', 'desc')->paginate(10);
         //dd($rows);
         return view('admin.rent.index', ['rows' => $rows]);
     }
