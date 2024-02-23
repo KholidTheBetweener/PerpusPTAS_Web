@@ -62,9 +62,9 @@ class RentController extends Controller
         $rent->save();
         $user = User::find($rent->users_id);
         $user->notify(new RentApprove($rent));
-        if ($book->stock = 0 || $book->stock < 0){
-            $dels = Rent::where('books_id', $book->id)->whereNull('status');
-            foreach($dels as $del)
+        if ($book->stock == 0 || $book->stock < 0){
+            $dels = Rent::where('books_id', $book->id)->whereNull('status')->get();
+           foreach($dels as $del)
             {
             User::find($del->users_id)->notify(new RentReject($del));
             $del->delete();

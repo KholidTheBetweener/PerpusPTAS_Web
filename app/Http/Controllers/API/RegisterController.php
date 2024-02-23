@@ -36,7 +36,7 @@ class RegisterController extends BaseController
         $user = User::create($input);
         $success['token'] =  $user->createToken('MyApp')->plainTextToken;
         $success['name'] =  $user->name;
-   //Register same email == 409 or same email
+   //dispatch event registered
         return $this->sendResponse($success, 'User register successfully.');
     }
    

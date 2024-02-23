@@ -15,7 +15,7 @@ class NotificationController extends BaseController
         $notifications = $user->unreadNotifications;
         return $this->sendResponse(NotificationResource::collection($notifications), 'Notifikasi Telah diambil.');
     }
-    public function show($id): JsonResponse
+    public function markAsRead($id): JsonResponse
     {
         $user = \Auth::user();
         $notification = $user->notifications->where('id', $id)->first();
