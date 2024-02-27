@@ -4,6 +4,11 @@ namespace App\Listeners;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use App\Models\User;
+use App\Models\Admin;
+use App\Notifications\NewRentNotification;
+use Illuminate\Notifications\Notification;
+use Illuminate\Auth\Events\Registered;
 
 class SendNewRentNotification
 {
@@ -18,8 +23,9 @@ class SendNewRentNotification
     /**
      * Handle the event.
      */
-    public function handle(object $event): void
+    public function handle(Event $event): void
     {
-        //
+        $admins = Admin::all();
+        Notification::send($admins, new NewRentNotification($event->user));
     }
 }

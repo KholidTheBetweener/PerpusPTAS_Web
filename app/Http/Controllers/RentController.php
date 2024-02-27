@@ -118,6 +118,8 @@ class RentController extends Controller
         {
             $query = $query->whereNull('status')->whereNotNull('date_request');
         }
+        $query = $query->user()->exists();
+        $query = $query->book()->exists();
         $rows = $query->orderBy('updated_at', 'desc')->paginate(10);
         //dd($rows);
         return view('admin.rent.index', ['rows' => $rows]);

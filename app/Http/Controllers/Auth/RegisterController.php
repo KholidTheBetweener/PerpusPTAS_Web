@@ -68,14 +68,13 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        //$user
-        //registered event
-        //return user
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-        ]);
+        ]); 
+        event(new Registered($user));
+        return $user;
     }
     public function showAdminRegisterForm()
     {

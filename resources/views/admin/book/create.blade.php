@@ -17,6 +17,16 @@
             {{ session('status') }}
         </div>
         @endif
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" aria-current="page" href="#inputbook">Masukkan Data Buku</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#importbook">Import Data Buku Melalui Excel</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+        <div id="inputbook" class="tab-pane fade in active">
         <form action="{{ route('book.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="row">
@@ -100,7 +110,19 @@
                 <button type="submit" class="btn btn-primary ml-3">Submit</button>
             </div>
         </form>
+        </div>
+        <div id="importbook" class="tab-pane fade in active">
+            <form action="{{ route('book.import') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="form-group">
+                            <label for="file">Choose Excel File</label>
+                            <input type="file" name="file" id="file" class="form-control">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Import</button>
+                    </form>
+        </div>  
     </div>
+    <!---->
     <script type="text/javascript">
         $(document).ready(function () {
     

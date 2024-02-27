@@ -39,7 +39,7 @@ class UserController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
-        //event(new Registered($user));
+        event(new Registered($user));
         return redirect()->route('user.index')->with('success','User has been created successfully.');
 
     }

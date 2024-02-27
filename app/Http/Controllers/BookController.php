@@ -9,6 +9,10 @@ use App\Models\Rent;
 use App\Models\Categories;
 use Illuminate\Http\JsonResponse;
 use Excel;
+use App\Models\User;
+use App\Notifications\NewBookNotification;
+use Illuminate\Notifications\Notification;
+
 class BookController extends Controller
 {
     public function search(Request $request): JsonResponse
@@ -68,8 +72,9 @@ class BookController extends Controller
             $bookCover->move($destinationPath, $profileImage);
             $input['book_cover'] = "book_cover/".$profileImage;
         }
-        Book::create($input);
-
+        $book = Book::create($input);
+        $users = User::all();
+        Notification::send($users, new NewBookNotification($book));
         return redirect()->route('book.index')->with('success','Buku has been created successfully.');
     }
     protected function show($id)
