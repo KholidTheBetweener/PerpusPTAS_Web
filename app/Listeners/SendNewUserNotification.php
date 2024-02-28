@@ -6,8 +6,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Models\User;
 use App\Models\Admin;
+use Notification;
 use App\Notifications\NewUserNotification;
-use Illuminate\Notifications\Notification;
 use Illuminate\Auth\Events\Registered;
 
 

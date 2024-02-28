@@ -9,6 +9,8 @@ use App\Models\Rent;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Auth\Events\Registered;
+
 class UserController extends Controller
 {
     public function search(Request $request): JsonResponse

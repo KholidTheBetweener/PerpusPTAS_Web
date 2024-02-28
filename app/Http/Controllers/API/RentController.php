@@ -11,6 +11,7 @@ use App\Http\Controllers\API\BaseController as BaseController;
 use App\Http\Resources\RentResource;
 use Illuminate\Http\JsonResponse;
 use Carbon\Carbon;
+use App\Events\NewRentNotify;
 
 class RentController extends BaseController
 {
@@ -101,6 +102,7 @@ class RentController extends BaseController
         $input['user_id'] = \Auth::user()->id;
    
         $rent = Rent::create($input);
+        event(new NewRentNotify($rent));
         // $rent = new Rent;
         // $rent->fill($input);
         // $rent->date_request = Carbon::now();

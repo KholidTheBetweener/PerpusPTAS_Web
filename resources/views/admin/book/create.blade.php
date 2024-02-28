@@ -17,17 +17,18 @@
             {{ session('status') }}
         </div>
         @endif
-        <ul class="nav nav-tabs">
-            <li class="nav-item">
-                <a class="nav-link active" data-toggle="tab" aria-current="page" href="#inputbook">Masukkan Data Buku</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#importbook">Import Data Buku Melalui Excel</a>
-            </li>
-        </ul>
-        <div class="tab-content">
-        <div id="inputbook" class="tab-pane fade in active">
-        <form action="{{ route('book.store') }}" method="POST" enctype="multipart/form-data">
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="input-tab" data-bs-toggle="tab" data-bs-target="#inputbook" type="button" role="tab" aria-controls="input" aria-selected="true">Masukkan Data Buku</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="import-tab" data-bs-toggle="tab" data-bs-target="#importbook" type="button" role="tab" aria-controls="import" aria-selected="false">Import Data Buku Melalui Excel</button>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="inputbook" role="tabpanel" aria-labelledby="input-tab">
+  <form action="{{ route('book.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12">
@@ -110,9 +111,9 @@
                 <button type="submit" class="btn btn-primary ml-3">Submit</button>
             </div>
         </form>
-        </div>
-        <div id="importbook" class="tab-pane fade in active">
-            <form action="{{ route('book.import') }}" method="POST" enctype="multipart/form-data">
+  </div>
+  <div class="tab-pane fade" id="importbook" role="tabpanel" aria-labelledby="import-tab">
+        <form action="{{ route('book.import') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
                             <label for="file">Choose Excel File</label>
@@ -120,8 +121,8 @@
                         </div>
                         <button type="submit" class="btn btn-primary">Import</button>
                     </form>
-        </div>  
-    </div>
+  </div>
+</div>  
     <!---->
     <script type="text/javascript">
         $(document).ready(function () {

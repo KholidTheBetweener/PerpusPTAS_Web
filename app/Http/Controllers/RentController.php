@@ -16,6 +16,7 @@ use App\Notifications\RentOverdue;
 use App\Notifications\RentApprove;
 use App\Notifications\RentReject;
 use App\Notifications\RentReturn;
+use App\Events\NewRentNotify;
 
 class RentController extends Controller
 {
@@ -118,8 +119,8 @@ class RentController extends Controller
         {
             $query = $query->whereNull('status')->whereNotNull('date_request');
         }
-        $query = $query->user()->exists();
-        $query = $query->book()->exists();
+        //$query->user()->exists();//check if corresponding table record existed
+        //$query->book()->exists();
         $rows = $query->orderBy('updated_at', 'desc')->paginate(10);
         //dd($rows);
         return view('admin.rent.index', ['rows' => $rows]);
@@ -141,10 +142,11 @@ class RentController extends Controller
         //select2
         $iduser = User::find($request->name);
         $idbuku = Book::find($request->book_title);
-        Rent::create([
+        $rent = Rent::create([
             'books_id' => $idbuku->id,
             'users_id' => $iduser->id,
         ]);
+        event(new NewRentNotify($rent));
         //$iduser->bukus()->attach($idbuku);
         return redirect()->route('rent.index')->with('success','Pinjam has been created successfully.');
     }

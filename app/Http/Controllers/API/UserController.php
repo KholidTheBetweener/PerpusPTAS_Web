@@ -9,6 +9,7 @@ use Validator;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Auth\Events\Registered;
 
 class UserController extends BaseController
 {

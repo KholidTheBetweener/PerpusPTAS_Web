@@ -10,8 +10,8 @@ use App\Models\Categories;
 use Illuminate\Http\JsonResponse;
 use Excel;
 use App\Models\User;
+use Notification;
 use App\Notifications\NewBookNotification;
-use Illuminate\Notifications\Notification;
 
 class BookController extends Controller
 {

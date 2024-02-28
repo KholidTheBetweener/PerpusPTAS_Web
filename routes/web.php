@@ -43,6 +43,7 @@ Route::get('/admin/dashboard',function(){
     $apply = Rent::whereNull('status')->whereNotNull('date_request')->count();
     $rent = Rent::where('status', true)->whereNotNull('date_rent')->count();
     $due = Rent::where('date_due', '<', Carbon::now())->where('status', true)->count();
+    //gak bisa lihat notif admin
     $notifications = Auth::guard('admin')->user()->unreadNotifications();
     return view('admin', compact('admin', 'user', 'book', 'apply', 'rent', 'due', 'notifications'));
 })->middleware('auth:admin')->name('admin.dashboard');

@@ -73,6 +73,12 @@ li {
   background-color: #262626;
   padding-left: 8px;
 }
+.tab-content .tab-pane {
+  background-color: #FFF;
+  color: #000;
+  min-height: 200px;
+  height: auto;
+}
 </style>
     <body>
         <div class="wrapper">
