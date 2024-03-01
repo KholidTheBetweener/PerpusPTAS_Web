@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 
 class HomeController extends Controller
 {
@@ -24,5 +26,23 @@ class HomeController extends Controller
     public function index()
     {
         return view('home');
+    }
+    public function markNotification(Request $request, $id)
+    {
+        $user = Auth::guard('admin')->user();
+        $notification = $user->notifications->where('id', $id)->first();
+        if ($notification) {
+            $notification->markAsRead();
+        return redirect()->route('admin.dashboard')->with('success','Notifikasi Sudah Terbaca');
+        }
+    }
+    public function markAll(Request $request)
+    {
+        $user = Auth::guard('admin')->user();
+        $notification = $user->unreadNotifications;
+        if ($notification) {
+            $notification->markAsRead();
+        return redirect()->route('admin.dashboard')->with('success','Notifikasi Sudah Terbaca');
+        }
     }
 }

@@ -9,25 +9,39 @@
                                             Hello Admin, Selamat Datang Di Perpustakaan Perkantas Back-Office Website!
                                             </h1>
                                         </div>
-                                        @if(auth())
-    @forelse($notifications as $notification)
-        <div class="alert alert-success" role="alert">
-            [{{ $notification->created_at }}] {{ $notification->data['title'] }} ({{ $notification->data['message'] }})
-            <a href="#" class="float-right mark-as-read" data-id="{{ $notification->id }}">
-                Mark as read
-            </a>
-        </div>
+                                        @if ($message = Session::get('success'))
+                                            <div class="alert alert-success">
+                                                <p>{{ $message }}</p>
+                                            </div>
+                                        @endif
+                                    @if(auth())
+                                        @forelse($notifications as $notification)
+                                            <div class="alert alert-success" role="alert">
+                                            <table>
+                                                <td>
+                                                [{{ $notification->created_at }}] {{ $notification->data['title'] }} ({{ $notification->data['message'] }})
+                                                </td>
+                                                <td>
+                                                <form action="{{route('admin.markNotification', $notification->id)}}" method="POST">
+                                                @csrf
+                                                <button type="submit" class="btn btn-primary ml-3">
+                                                    Mark as read
+                                                </button>
+                                                </form>
+                                                </td>
+                                            </table>    
+                                            </div>
 
-        @if($loop->last)
-            <a href="#" id="mark-all">
-                Mark all as read
-            </a>
-        @endif
-    @empty
-        There are no new notifications
-    @endforelse
-@endif
-                                <div class="card mb-4">
+                                            @if($loop->last)
+                                                <a href="{{route('admin.markAll')}}" id="mark-all">
+                                                    Mark all as read
+                                                </a>
+                                            @endif
+                                        @empty
+                                            There are no new notifications
+                                        @endforelse
+                                    @endif
+                            <div class="card mb-4">
                                 <table>
                             <tbody>
                             <tr>

@@ -6,10 +6,10 @@ use Illuminate\Http\Request;
 use App\Providers\RouteServiceProvider;
 use App\Models\Book;
 use App\Models\Rent;
+use App\Models\User;
 use App\Models\Categories;
 use Illuminate\Http\JsonResponse;
 use Excel;
-use App\Models\User;
 use Notification;
 use App\Notifications\NewBookNotification;
 
@@ -145,6 +145,7 @@ class BookController extends Controller
     }
     protected function destroy(Book $book)
     {
+        //find if rent had book
         $book->delete();
         return redirect()->route('book.index')->with('success','Buku has been deleted successfully');
     }

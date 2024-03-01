@@ -41,7 +41,7 @@ class RentController extends BaseController
         {
             $rent = $rent->whereNull('status')->whereNotNull('date_request');
         }
-        $rent = $rent->book()->exists();
+        //$rent = $rent->book()->exists();
         return $this->sendResponse(
             RentResource::collection($rent)->values()->toArray($request),
             'Rent retrieved successfully.'

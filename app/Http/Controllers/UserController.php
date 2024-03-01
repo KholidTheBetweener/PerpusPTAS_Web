@@ -85,6 +85,7 @@ class UserController extends Controller
     }
     protected function destroy(User $user)
     {
+        //find if rent had user
         $user->delete();
         return redirect()->route('user.index')->with('success','User has been deleted successfully');
     }
