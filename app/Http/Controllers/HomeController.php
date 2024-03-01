@@ -15,7 +15,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth:admin');
     }
 
     /**
@@ -27,10 +27,11 @@ class HomeController extends Controller
     {
         return view('home');
     }
-    public function markNotification(Request $request, $id)
+    public function markNotification($id)
     {
-        $user = Auth::guard('admin')->user();
+        $user = \Auth::guard('admin')->user();
         $notification = $user->notifications->where('id', $id)->first();
+        //dd($notification);
         if ($notification) {
             $notification->markAsRead();
         return redirect()->route('admin.dashboard')->with('success','Notifikasi Sudah Terbaca');

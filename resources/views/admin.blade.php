@@ -22,11 +22,9 @@
                                                 [{{ $notification->created_at }}] {{ $notification->data['title'] }} ({{ $notification->data['message'] }})
                                                 </td>
                                                 <td>
-                                                <form action="{{route('admin.markNotification', $notification->id)}}" method="POST">
+                                                <form action="{{route('admin.markNotification', $notification->id)}}" method="post">
                                                 @csrf
-                                                <button type="submit" class="btn btn-primary ml-3">
-                                                    Mark as read
-                                                </button>
+                                                    <input type="submit" class="btn btn-primary ml-3" value="Mark as Read">
                                                 </form>
                                                 </td>
                                             </table>    

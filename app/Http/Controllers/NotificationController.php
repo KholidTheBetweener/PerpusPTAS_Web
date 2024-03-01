@@ -40,4 +40,5 @@ class NotificationController extends Controller
    
         dd('Task completed!');
     }
+    
 }

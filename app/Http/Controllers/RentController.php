@@ -20,6 +20,7 @@ use App\Events\NewRentNotify;
 
 class RentController extends Controller
 {
+    
     protected function all()
     {
         $rows = Rent::query()->orderBy('updated_at', 'desc')->paginate(10); // the rows will be in data key

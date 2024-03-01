@@ -26,6 +26,6 @@ class SendNewRentNotification
     public function handle(NewRentNotify $event): void
     {
         $admins = Admin::all();
-        Notification::send($admins, new NewRentNotification($event->user));
+        Notification::send($admins, new NewRentNotification($event->rent));
     }
 }

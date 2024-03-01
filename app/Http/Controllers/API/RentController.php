@@ -99,7 +99,7 @@ class RentController extends BaseController
         if (!empty($arraynull)) {
             return $this->sendError('profile belum lengkap.', $arraynull, 422);
         }
-        $input['user_id'] = \Auth::user()->id;
+        $input['users_id'] = \Auth::user()->id;
    
         $rent = Rent::create($input);
         event(new NewRentNotify($rent));

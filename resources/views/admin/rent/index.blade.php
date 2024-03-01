@@ -171,7 +171,7 @@
                 @endif
             </tbody>
         </table>
-        {{ $rows->links() }}
+        {{ $rows->appends(request()->except('page'))->links() }}
   </div>
 <!-- Tabs content -->
     </div>
