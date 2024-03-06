@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Models\User;
 use App\Models\Admin;
 use Notification;
@@ -18,7 +20,7 @@ class NotificationController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth:admin');
     }
   
     public function index()
@@ -40,5 +42,23 @@ class NotificationController extends Controller
    
         dd('Task completed!');
     }
-    
+    public function markNotification($id)
+    {
+        $user = \Auth::guard('admin')->user();
+        $notification = $user->notifications->where('id', $id)->first();
+        //dd($notification);
+        if ($notification) {
+            $notification->markAsRead();
+        return redirect()->route('admin.dashboard')->with('success','Notifikasi Sudah Terbaca');
+        }
+    }
+    public function markAll(Request $request)
+    {
+        $user = \Auth::guard('admin')->user();
+        $notification = $user->unreadNotifications;
+        if ($notification) {
+            $notification->markAsRead();
+        return redirect()->route('admin.dashboard')->with('success','Semua Notifikasi Sudah Terbaca');
+        }
+    }    
 }

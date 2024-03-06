@@ -47,8 +47,8 @@ Route::get('/admin/dashboard',function(){
     $notifications = Auth::guard('admin')->user()->unreadNotifications;
     return view('admin', compact('admin', 'user', 'book', 'apply', 'rent', 'due', 'notifications'));
 })->middleware('auth:admin')->name('admin.dashboard');
-Route::post('/admin/mark-as-read/{id}', [App\Http\Controllers\HomeController::class, 'markNotification'])->name('admin.markNotification');
-Route::post('/admin/mark-as-read', [App\Http\Controllers\HomeController::class, 'markAll'])->name('admin.markAll');
+Route::post('/admin/mark-as-read/{id}', [NotificationController::class, 'markNotification'])->name('admin.markNotification');
+Route::post('/admin/mark-as-read', [NotificationController::class, 'markAll'])->name('admin.markAll');
 //notify
 Route::get('/send-notification', [NotificationController::class, 'sendNotification']);
 //Admin Resource
