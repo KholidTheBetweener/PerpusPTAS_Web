@@ -24,6 +24,17 @@ use App\Http\Controllers\API\NotificationController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+Route::post('/forgot-password', function (Request $request) {
+    $request->validate(['email' => 'required|email']);
+ 
+    $status = Password::sendResetLink(
+        $request->only('email')
+    );
+ 
+    return $status === Password::RESET_LINK_SENT
+                ? back()->with(['status' => __($status)])
+                : back()->withErrors(['email' => __($status)]);
+})->middleware('guest')->name('password.email');
 Route::post('/reset-password', function (Request $request) {
     $request->validate([
         'token' => 'required',

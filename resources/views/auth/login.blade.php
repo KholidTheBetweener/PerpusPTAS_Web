@@ -5,10 +5,10 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
+                <div class="card-header">{{ $title }}</div>
 
                 <div class="card-body">
-                        <form method="POST" action="{{ route('admin.login') }}">
+                        <form method="POST" action="{{ route($loginRoute) }}">
                         @csrf
 
                         <div class="row mb-3">
@@ -58,7 +58,7 @@
                                 </button>
 
                                 @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
+                                    <a class="btn btn-link" href="{{ route($forgotPasswordRoute) }}">
                                         {{ __('Forgot Your Password?') }}
                                     </a>
                                 @endif

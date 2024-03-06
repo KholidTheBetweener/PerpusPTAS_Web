@@ -21,7 +21,7 @@ class LoginController extends Controller
     |
     */
 
-    use AuthenticatesUsers, ThrottlesLogins;
+    use AuthenticatesUsers;
 
     /**
      * Where to redirect users after login.
@@ -40,9 +40,43 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
         $this->middleware('guest:admin')->except('logout');
     }
+    private function validator(Request $request)
+    {
+        //validation rules.
+        $rules = [
+            'email'    => 'required|email|exists:admins|min:5|max:191',
+            'password' => 'required|string|min:4|max:255',
+        ];
+
+        //custom validation error messages.
+        $messages = [
+            'email.exists' => 'These credentials do not match our records.',
+        ];
+
+        //validate the request.
+        $request->validate($rules,$messages);
+    }
+    public function showLoginForm()
+    {
+        return view('auth.login', [
+            'title' => 'User Login',
+            'loginRoute' => 'login',
+            'forgotPasswordRoute' => 'password.request',
+        ]);
+    }
     public function showAdminLoginForm()
     {
-        return view('auth.login', ['url' => route('admin.login-view'), 'title'=>'Admin']);
+        return view('auth.login', [
+            'title' => 'Admin Login',
+            'loginRoute' => 'admin.login',
+            'forgotPasswordRoute' => 'admin.password.request',
+        ]);
+    }
+    private function loginFailed(){
+        return redirect()
+            ->back()
+            ->withInput()
+            ->with('error','Login failed, please try again!');
     }
 
     public function adminLogin(Request $request)
@@ -64,5 +98,9 @@ class LoginController extends Controller
         }
         $this->incrementLoginAttempts($request);
         return $this->loginFailed();
+    }
+    public function logout(){
+        \Auth::guard('admin')->logout();
+        return redirect('/')->with('status','User has been logged out!');
     }
 }

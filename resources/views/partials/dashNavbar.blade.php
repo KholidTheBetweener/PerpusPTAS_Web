@@ -18,31 +18,29 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto">
-        
-      </ul>
-<!-- right navbar links -->
-      <ul class="navbar-nav">
-      <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->username }}
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                    onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-      </ul>
-    </div>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <!-- Right Side Of Navbar -->
+            <ul class="navbar-nav ml-auto">
+                <!-- Authentication Links -->
+                @if(Auth::guard('admin')->check())
+                    <li class="nav-item dropdown">
+                        <a id="adminDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            {{ Auth::user()->username }} <span class="caret"></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="adminDropdown">
+                            <a href="{{route('admin.dashboard')}}" class="dropdown-item">Dashboard</a>
+                            
+                                @csrf
+                            </form>
+                        </div>
+                    </li>
+                @endif
+                <a class="dropdown-item" href="#" onclick="event.preventDefault();document.querySelector('#admin-logout-form').submit();">
+                                Logout
+                            </a>
+                            <form id="admin-logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+            </ul>
+        </div>
   </nav>
   <!-- /.navbar -->
 </header>
