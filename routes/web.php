@@ -30,7 +30,9 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+
 Route::get('/admin',[LoginController::class,'showAdminLoginForm'])->name('admin.login-view');
+Route::get('/admin/password-reset', [App\Http\Controllers\Auth\AdminForgotController::class,'showLinkRequestForm'])->name('admin.password-reset);
 Route::post('/admin',[LoginController::class,'adminLogin'])->name('admin.login');
 Route::get('/admin/register',[RegisterController::class,'showAdminRegisterForm'])->name('admin.register-view');
 Route::post('/admin/register',[RegisterController::class,'createAdmin'])->name('admin.register');
