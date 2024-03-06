@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\ThrottlesLogins;
 
 class LoginController extends Controller
 {
@@ -20,7 +21,7 @@ class LoginController extends Controller
     |
     */
 
-    use AuthenticatesUsers;
+    use AuthenticatesUsers, ThrottlesLogins;
 
     /**
      * Where to redirect users after login.
@@ -50,11 +51,18 @@ class LoginController extends Controller
             'email'   => 'required|email',
             'password' => 'required|min:6'
         ]);
+        if ($this->hasTooManyLoginAttempts($request)){
+            //Fire the lockout event.
+            $this->fireLockoutEvent($request);
+    
+            //redirect the user back after lockout.
+            return $this->sendLockoutResponse($request);
+        }
         if (\Auth::guard('admin')->attempt($request->only(['email','password']), $request->get('remember'))){
             
-            return redirect()->intended('/admin/dashboard');
+            return redirect()->intended(route('admin.dashboard'));
         }
-
-        return back()->withInput($request->only('email', 'remember'));
+        $this->incrementLoginAttempts($request);
+        return $this->loginFailed();
     }
 }
