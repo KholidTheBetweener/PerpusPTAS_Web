@@ -51,7 +51,8 @@ class BookController extends Controller
     public function create()
     {
         $k = Categories::all();
-        return view('admin.book.create', compact('k'));
+        $d = $k;
+        return view('admin.book.create', compact('k', 'd'));
     }
     protected function store(Request $request)
     {

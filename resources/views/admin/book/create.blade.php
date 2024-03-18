@@ -116,6 +116,67 @@
         <form action="{{ route('book.import') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
+                            <p>Untuk mengimport data dari file excel ke database, usahakan data berformat berikut pada file excel(baris dan kolum pertama merupakan bagian dari excel):</p>
+                            <table class='table table-bordered'>
+                                <th>Baris/Kolum</th>
+                                <th>A</th>
+                                <th>B</th>
+                                <th>C</th>
+                                <th>D</th>
+                                <th>E</th>
+                                <th>F</th>
+                                <th>G</th>
+                                <tr>    
+                                <th>1</th>
+                                <td>Kode Kategori</td>
+                                <td>Kode Buku</td>
+                                <td>Judul Buku</td>
+                                <td>Pengarang</td>
+                                <td>Penerbit</td>
+                                <td>Deskripsi Buku</td>
+                                <td>Exemplar</td>
+                                </tr>
+                            </table>
+                            <p>Contoh format file excel:</p>
+                            <table class='table table-bordered'>
+                                <th>Baris/Kolum</th>
+                                <th>A</th>
+                                <th>B</th>
+                                <th>C</th>
+                                <th>D</th>
+                                <th>E</th>
+                                <th>F</th>
+                                <th>G</th>
+                                <tr>    
+                                <th>1</th>
+                                <td>1</td>
+                                <td>1001</td>
+                                <td>PETUALANGAN MENJELAJAH KITAB INJIL DAN KISAH PARA RASUL</td>
+                                <td>RAY. C. STEDMAN</td>
+                                <td>DISCOVERY HOUSE</td>
+                                <td>Cerita tentang para Rasul berdasarkan kitab injil</td>
+                                <td>1</td>
+                                </tr>
+                                <tr>    
+                                <th>2</th>
+                                <td>1</td>
+                                <td>1009</td>
+                                <td>MESKI GENTAR TETAP TEGAR (HABAKUK)</td>
+                                <td>D. MARTIN LLOYD-JONES</td>
+                                <td>PERKANTAS</td>
+                                <td>Nasihat-nasihat tentang kepercayaan diri</td>
+                                <td>2</td>
+                                </tr>
+                            </table>
+                            Berikut merupakan kode untuk setiap kategori:
+                            <table class='table table-bordered'>
+                                <th>Kategori</th><th>Kode</th>
+                                @foreach($d as $d)
+                                <tr>    
+                                <td>{{ $d->name }}</td><td>{{ $d->id }}</td>
+                                </tr>
+                                @endforeach
+                            </table>
                             <label for="file">Choose Excel File</label>
                             <input type="file" name="file" id="file" class="form-control">
                         </div>
