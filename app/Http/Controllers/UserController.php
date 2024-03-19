@@ -86,7 +86,14 @@ class UserController extends Controller
     protected function destroy(User $user)
     {
         //find if rent had user
-        $user->delete();
-        return redirect()->route('user.index')->with('success','User has been deleted successfully');
+        $rent = Rent::where('users_id',  $user);
+        if ($rent === null) {
+            $user->delete();
+            return redirect()->route('user.index')->with('success','User has been deleted successfully');
+         }
+        else{
+            $count = $rent->count();
+            return redirect()->route('user.index')->with('failed','Ada'. $count .'Catatan Peminjaman untuk akun ini dan catatan perlu dihapus dulu sebelum akun bisa dihapus');
+        }
     }
 }

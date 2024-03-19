@@ -31,9 +31,8 @@
                                             </div>
 
                                             @if($loop->last)
-                                                <a href="{{route('admin.markAll')}}" id="mark-all">
-                                                    Mark all as read
-                                                </a>
+                                            <form id="form" action="{{route('admin.markAll')}}" method="POST">@csrf</form>
+                                            <a href="javascript:void(0)" onclick="document.getElementById('form').submit()">Mark all as read</a>
                                             @endif
                                         @empty
                                             There are no new notifications

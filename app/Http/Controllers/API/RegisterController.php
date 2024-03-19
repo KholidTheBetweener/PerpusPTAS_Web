@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Mail;
 use Illuminate\Mail\Message;
+use Illuminate\Foundation\Auth\ResetsPasswords;
+use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 
 class RegisterController extends BaseController
 {
@@ -79,6 +81,23 @@ class RegisterController extends BaseController
     $message = $response == Password::RESET_LINK_SENT ? 'Mail send successfully' : GLOBAL_SOMETHING_WANTS_TO_WRONG;
     
     return response()->json($message);
+    }
+    public function passwordReset(Request $request){
+        $input = $request->only('email','token', 'password', 'password_confirmation');
+        $validator = Validator::make($input, [
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|confirmed|min:8',
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+        $response = Password::reset($input, function ($user, $password) {
+            $user->password = Hash::make($password);
+            $user->save();
+        });
+        $message = $response == Password::PASSWORD_RESET ? 'Password reset successfully' : GLOBAL_SOMETHING_WANTS_TO_WRONG;
+        return response()->json($message);
     }
     public function change_password(Request $request)
     {

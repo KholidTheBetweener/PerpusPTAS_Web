@@ -148,7 +148,14 @@ class BookController extends Controller
     protected function destroy(Book $book)
     {
         //find if rent had book
-        $book->delete();
-        return redirect()->route('book.index')->with('success','Buku has been deleted successfully');
+        $rent = Rent::where('users_id',  $book);
+        if ($rent === null) {
+            $book->delete();
+            return redirect()->route('book.index')->with('success','Buku has been deleted successfully');
+         }
+        else{
+            $count = $rent->count();
+            return redirect()->route('book.index')->with('failed','Ada'. $count .'Catatan Peminjaman untuk akun ini dan catatan perlu dihapus dulu sebelum akun bisa dihapus');
+        }
     }
 }
