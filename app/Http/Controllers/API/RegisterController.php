@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\Auth;
 use Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
+use Mail;
+use Illuminate\Mail\Message;
 
 class RegisterController extends BaseController
 {
@@ -60,33 +64,21 @@ class RegisterController extends BaseController
             return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
         } 
     }
+    //https://stackoverflow.com/questions/56609904/how-can-i-call-laravel-passports-forgot-password-and-verify-api-with-angular-8
     public function forgot_password(Request $request)
     {
-        $input = $request->all();
-        $rules = array(
-            'email' => "required|email",
-        );
-        $validator = Validator::make($input, $rules);
-        if ($validator->fails()) {
-            $arr = array("status" => 400, "message" => $validator->errors()->first(), "data" => array());
-        } else {
-            try {
-                $response = Password::sendResetLink($request->only('email'), function (Message $message) {
-                    $message->subject($this->getEmailSubject());
-                });
-                switch ($response) {
-                    case Password::RESET_LINK_SENT:
-                        return \Response::json(array("status" => 200, "message" => trans($response), "data" => array()));
-                    case Password::INVALID_USER:
-                        return \Response::json(array("status" => 400, "message" => trans($response), "data" => array()));
-                }
-            } catch (\Swift_TransportException $ex) {
-                $arr = array("status" => 400, "message" => $ex->getMessage(), "data" => []);
-            } catch (Exception $ex) {
-                $arr = array("status" => 400, "message" => $ex->getMessage(), "data" => []);
-            }
-        }
-        return \Response::json($arr);
+        $input = $request->only('email');
+    $validator = Validator::make($input, [
+        'email' => "required|email"
+    ]);
+    if ($validator->fails()) {
+        return response()->json($validator->errors());
+    }
+    $response = Password::sendResetLink($input);
+
+    $message = $response == Password::RESET_LINK_SENT ? 'Mail send successfully' : GLOBAL_SOMETHING_WANTS_TO_WRONG;
+    
+    return response()->json($message);
     }
     public function change_password(Request $request)
     {
