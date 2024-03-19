@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Auth;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 
 class LoginController extends Controller
@@ -21,7 +22,7 @@ class LoginController extends Controller
     |
     */
 
-    use AuthenticatesUsers;
+    use AuthenticatesUsers, ThrottlesLogins;
 
     /**
      * Where to redirect users after login.
@@ -56,6 +57,9 @@ class LoginController extends Controller
         //validate the request.
         $request->validate($rules,$messages);
     }
+    public function username(){
+        return 'email';
+    }
     public function showLoginForm()
     {
         return view('auth.login', [
@@ -81,10 +85,7 @@ class LoginController extends Controller
 
     public function adminLogin(Request $request)
     {
-        $this->validate($request, [
-            'email'   => 'required|email',
-            'password' => 'required|min:6'
-        ]);
+        $this->validator($request);
         if ($this->hasTooManyLoginAttempts($request)){
             //Fire the lockout event.
             $this->fireLockoutEvent($request);
@@ -92,15 +93,17 @@ class LoginController extends Controller
             //redirect the user back after lockout.
             return $this->sendLockoutResponse($request);
         }
-        if (\Auth::guard('admin')->attempt($request->only(['email','password']), $request->get('remember'))){
-            
-            return redirect()->intended(route('admin.dashboard'));
+        if(\Auth::guard('admin')->attempt($request->only('email','password'),$request->filled('remember'))){
+            //Authentication passed...
+            return redirect()
+                ->intended(route('admin.dashboard'))
+                ->with('status','You are Logged in as Admin!');
         }
         $this->incrementLoginAttempts($request);
         return $this->loginFailed();
     }
-    public function logout(){
+    public function adminLogout(){
         \Auth::guard('admin')->logout();
-        return redirect('/')->with('status','User has been logged out!');
+        return redirect('admin.login')->with('status','Admin has been logged out!');
     }
 }

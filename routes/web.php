@@ -48,7 +48,7 @@ Auth::routes();
 });*/
 Route::get('/admin',[LoginController::class,'showAdminLoginForm'])->name('admin.login-view');
 Route::post('/admin',[LoginController::class,'adminLogin'])->name('admin.login');
-Route::post('admin/logout',[LoginController::class,'logout'])->name('admin.logout');
+Route::post('admin/logout',[LoginController::class,'adminLogout'])->name('admin.logout');
 
 Route::get('/admin/register',[RegisterController::class,'showAdminRegisterForm'])->name('admin.register-view');
 Route::post('/admin/register',[RegisterController::class,'createAdmin'])->name('admin.register');
@@ -82,7 +82,7 @@ Route::get('/admin/rent/all',[RentController::class,'all'])->middleware('auth:ad
 Route::get('/admin/rent/search',[RentController::class,'search'])->middleware('auth:admin')->name('rent.search');
 Route::get('/admin/rent/track',[RentController::class,'track'])->middleware('auth:admin')->name('rent.track');
 Route::post('/admin/user/photo/{user}',[UserController::class,'photo'])->middleware('auth:admin')->name('user.photo');
-Route::post('/import-excel', [BookController::class,'import'])->middleware('auth:admin')->name('book.import');
+Route::post('/admin/book/import-excel', [BookController::class,'import'])->middleware('auth:admin')->name('book.import');
 Route::post('/admin/book/cover/{book}',[BookController::class,'cover'])->middleware('auth:admin')->name('book.cover');
 Route::post('/admin/book/barcode/{book}',[BookController::class,'barcode'])->middleware('auth:admin')->name('book.barcode');
 Route::post('/admin/rent/approve/{rent}',[RentController::class,'approve'])->middleware('auth:admin')->name('rent.approve');
@@ -96,8 +96,3 @@ Route::resource('/admin/user',UserController::class)->middleware('auth:admin');
 Route::resource('/admin/book',BookController::class)->middleware('auth:admin');
 Route::resource('/admin/rent',RentController::class)->middleware('auth:admin');
 Route::resource('/admin/categories',CategoriesController::class)->middleware('auth:admin');
-
-
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

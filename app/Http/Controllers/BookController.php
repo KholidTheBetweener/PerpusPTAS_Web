@@ -11,6 +11,7 @@ use App\Models\Categories;
 use Illuminate\Http\JsonResponse;
 use Excel;
 use Notification;
+use App\Imports\BookImport;
 use App\Notifications\NewBookNotification;
 
 class BookController extends Controller
@@ -31,14 +32,14 @@ class BookController extends Controller
         {
             // Validate the uploaded file
             $request->validate([
-                'file' => 'required|mimes:xlsx,xls',
+                'file' => 'required|mimes:csv,xls,xlsx',
             ]);
      
             // Get the uploaded file
             $file = $request->file('file');
      
             // Process the Excel file
-            Excel::import(new Book, $file);
+            Excel::import(new BookImport, $file);
      
             return redirect()->back()->with('success', 'Excel file imported successfully!');
         }

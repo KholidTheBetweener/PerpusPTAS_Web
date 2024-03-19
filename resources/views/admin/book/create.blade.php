@@ -116,7 +116,7 @@
         <form action="{{ route('book.import') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
-                            <p>Untuk mengimport data dari file excel ke database, usahakan data berformat berikut pada file excel(baris dan kolum pertama merupakan bagian dari excel):</p>
+                            <p>Untuk mengimport data dari file excel ke database, usahakan data berformat berikut pada file excel(baris dan kolum pertama merupakan bagian dari excel, jadi masukkan data-data buku saja di file excel):</p>
                             <table class='table table-bordered'>
                                 <th>Baris/Kolum</th>
                                 <th>A</th>
