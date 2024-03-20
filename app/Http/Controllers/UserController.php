@@ -83,17 +83,17 @@ class UserController extends Controller
         ])->save();
         return redirect()->route('user.index')->with('success','User Has Been updated successfully');
     }
-    protected function destroy(User $user)
+    protected function destroy($id)
     {
         //find if rent had user
-        $rent = Rent::where('users_id',  $user);
-        if ($rent === null) {
+        $user = User::with('rent')->findOrFail($id);
+        if ($user->rent->count() == 0) {
             $user->delete();
             return redirect()->route('user.index')->with('success','User has been deleted successfully');
          }
         else{
-            $count = $rent->count();
-            return redirect()->route('user.index')->with('failed','Ada'. $count .'Catatan Peminjaman untuk akun ini dan catatan perlu dihapus dulu sebelum akun bisa dihapus');
+            $count = $user->rent->count();
+            return redirect()->route('user.index')->with('success','Ada '. $count .' Catatan Peminjaman untuk akun ini dan catatan perlu dihapus dulu sebelum akun bisa dihapus');
         }
     }
 }

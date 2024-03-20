@@ -13,6 +13,7 @@ use Excel;
 use Notification;
 use App\Imports\BookImport;
 use App\Notifications\NewBookNotification;
+use App\Notifications\ImportBookNotification;
 
 class BookController extends Controller
 {
@@ -39,8 +40,11 @@ class BookController extends Controller
             $file = $request->file('file');
      
             // Process the Excel file
-            Excel::import(new BookImport, $file);
-     
+            $excel = Excel::import(new BookImport, $file);
+            $users = User::all();
+            //how to count in excel?
+            $count = count($excel);
+            Notification::send($users, new ImportBookNotification($count));
             return redirect()->back()->with('success', 'Excel file imported successfully!');
         }
     protected function index()
@@ -145,17 +149,17 @@ class BookController extends Controller
         ])->save();
         return redirect()->route('book.index')->with('success','Buku Has Been updated successfully');
     }
-    protected function destroy(Book $book)
+    protected function destroy($id)
     {
         //find if rent had book
-        $rent = Rent::where('users_id',  $book);
-        if ($rent === null) {
+        $book = Book::with('rent')->findOrFail($id);
+        if ($book->rent->count() == 0) {
             $book->delete();
             return redirect()->route('book.index')->with('success','Buku has been deleted successfully');
          }
         else{
-            $count = $rent->count();
-            return redirect()->route('book.index')->with('failed','Ada'. $count .'Catatan Peminjaman untuk akun ini dan catatan perlu dihapus dulu sebelum akun bisa dihapus');
+            $count = $book->rent->count();
+            return redirect()->route('book.index')->with('success','Ada '. $count .' Catatan Peminjaman untuk buku ini dan catatan perlu dihapus dulu sebelum buku bisa dihapus');
         }
     }
 }
