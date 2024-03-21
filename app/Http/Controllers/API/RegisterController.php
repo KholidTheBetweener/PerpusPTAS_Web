@@ -70,12 +70,12 @@ class RegisterController extends BaseController
     public function forgot_password(Request $request)
     {
         $input = $request->only('email');
-    $validator = Validator::make($input, [
-        'email' => "required|email"
-    ]);
-    if ($validator->fails()) {
-        return response()->json($validator->errors());
-    }
+        $validator = Validator::make($input, [
+            'email' => "required|email"
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        }
     $response = Password::sendResetLink($input);
 
     $message = $response == Password::RESET_LINK_SENT ? 'Mail send successfully' : GLOBAL_SOMETHING_WANTS_TO_WRONG;

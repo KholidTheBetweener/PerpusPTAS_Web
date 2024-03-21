@@ -27,7 +27,8 @@ use App\Http\Controllers\API\NotificationController;
 Route::post('forgot-password', [RegisterController::class, 'forgot_password']);
 
 Route::group(['middleware' => 'auth:api'], function () {
- Route::post('change-password', [RegisterController::class, 'change_password']);
+    Route::post('reset-password', [RegisterController::class, 'passwordReset']);
+    Route::post('change-password', [RegisterController::class, 'change_password']);
 });
 
 Route::controller(RegisterController::class)->group(function(){

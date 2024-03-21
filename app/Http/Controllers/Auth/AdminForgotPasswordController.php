@@ -7,6 +7,7 @@ use Password;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
+use Illuminate\Auth\Notifications\ResetPassword;
 
 class AdminForgotPasswordController extends Controller
 {
@@ -42,6 +43,13 @@ class AdminForgotPasswordController extends Controller
      */
     public function broker(){
         return Password::broker('admins');
+    }
+
+    public function sendEmail(Request $request) {
+        ResetPassword::createUrlUsing(function ($user, string $token){
+         return route('admin.password.reset', compact($token));
+        });
+        $this->sendRequestLinkEmail($request);
     }
 
     /**
