@@ -33,7 +33,7 @@ class AdminForgotPasswordController extends Controller
         return view('auth.passwords.email',[
             'title' => 'Admin Password Reset',
             'passwordEmailRoute' => 'admin.password.email'
-        ]);
+        ])->with('user_type', request()->user_type);
     }
 
     /**
