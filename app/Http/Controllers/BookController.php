@@ -38,13 +38,12 @@ class BookController extends Controller
      
             // Get the uploaded file
             $file = $request->file('file');
-     
+            $import = new BookImport;
             // Process the Excel file
-            $excel = Excel::import(new BookImport, $file);
+            Excel::import($import, $file);
             $users = User::all();
             //how to count in excel?
-            $count = count($excel);
-            Notification::send($users, new ImportBookNotification($count));
+            Notification::send($users, new ImportBookNotification($import->getRowCount));
             return redirect()->back()->with('success', 'Excel file imported successfully!');
         }
     protected function index()

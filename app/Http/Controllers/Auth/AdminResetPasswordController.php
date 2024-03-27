@@ -46,7 +46,9 @@ class AdminResetPasswordController extends Controller
             'title' => 'Reset Admin Password',
             'passwordUpdateRoute' => 'admin.password.update',
             'token' => $token,
-        ]);
+        ])->with(
+            ['token' => $token, 'email' => $request->email]
+        );
     }
 
     /**
