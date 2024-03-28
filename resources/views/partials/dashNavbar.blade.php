@@ -37,7 +37,7 @@
                 <a class="dropdown-item" href="#" onclick="event.preventDefault();document.querySelector('#admin-logout-form').submit();">
                                 Logout
                             </a>
-                <form id="admin-logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+                <form id="admin-logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                     @csrf
                 </form>
             </ul>

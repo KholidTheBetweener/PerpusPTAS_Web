@@ -102,8 +102,8 @@ class LoginController extends Controller
         $this->incrementLoginAttempts($request);
         return $this->loginFailed();
     }
-    public function adminLogout(){
-        \Auth::guard('admin')->logout();
+    /*public function adminLogout(){
+        \Auth::user->logout();
         return redirect('admin.login')->with('status','Admin has been logged out!');
-    }
+    }*/
 }

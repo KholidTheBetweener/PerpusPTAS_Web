@@ -48,13 +48,13 @@ Auth::routes();
 });*/
 Route::get('/admin',[LoginController::class,'showAdminLoginForm'])->name('admin.login-view');
 Route::post('/admin',[LoginController::class,'adminLogin'])->name('admin.login');
-Route::post('admin/logout',[LoginController::class,'adminLogout'])->name('admin.logout');
+//Route::post('admin/logout',[LoginController::class,'adminLogout'])->name('admin.logout');
 
 Route::get('/admin/register',[RegisterController::class,'showAdminRegisterForm'])->name('admin.register-view');
 Route::post('/admin/register',[RegisterController::class,'createAdmin'])->name('admin.register');
 //Forgot Password Routes
 Route::get('/admin/password/reset',[App\Http\Controllers\Auth\AdminForgotPasswordController::class, 'showLinkRequestForm'])->name('admin.password.request')->middleware('guest');
-Route::post('/admin/password/email',[App\Http\Controllers\Auth\AdminForgotPasswordController::class, 'sendEmail'])->name('admin.password.email');
+Route::post('/admin/password/email',[App\Http\Controllers\Auth\AdminForgotPasswordController::class, 'sendResetLinkEmail'])->name('admin.password.email');
 
 //Reset Password Routes
 Route::get('/admin/password/reset/{token}',[App\Http\Controllers\Auth\AdminResetPasswordController::class, 'showResetForm'])->name('admin.password.reset');

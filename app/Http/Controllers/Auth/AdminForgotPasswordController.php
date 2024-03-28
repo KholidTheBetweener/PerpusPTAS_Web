@@ -46,12 +46,12 @@ class AdminForgotPasswordController extends Controller
         return Password::broker('admins');
     }
 
-    public function sendEmail(Request $request) {
+    /*public function sendEmail(Request $request) {
         ResetPassword::createUrlUsing(function ($user, string $token){
          return route('admin.password.reset', compact($token));
         });
         $this->sendRequestLinkEmail($request);
-    }
+    }*/
 
     /**
      * Get the guard to be used during authentication
