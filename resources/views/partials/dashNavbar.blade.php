@@ -29,17 +29,16 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="adminDropdown">
                             <a href="{{route('admin.dashboard')}}" class="dropdown-item">Dashboard</a>
-                            
-                            
-                        </div>
-                    </li>
-                @endif
-                <a class="dropdown-item" href="#" onclick="event.preventDefault();document.querySelector('#admin-logout-form').submit();">
+                            <a class="dropdown-item" href="#" onclick="event.preventDefault();document.querySelector('#admin-logout-form').submit();">
                                 Logout
                             </a>
                 <form id="admin-logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                     @csrf
-                </form>
+                </form>        
+                        </div>
+                    </li>
+                @endif
+                
             </ul>
         </div>
   </nav>

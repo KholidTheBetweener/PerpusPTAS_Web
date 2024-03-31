@@ -155,9 +155,9 @@ class RentController extends Controller
     {
         $user = User::all();
         $book = Book::all();
-        return view('admin.rent.edit', compact('user', 'book'));
+        return view('admin.rent.edit', compact('user', 'book', 'rent'));
     }
-    protected function update(Request $request, Rent $pinjam)
+    protected function update(Request $request, Rent $ent)
     {
         $iduser = User::where('email','like','%' . request('name') . '%')->first();
         $idbuku = Book::where('book_title','like','%' . request('book_title') . '%')->first();
@@ -170,7 +170,7 @@ class RentController extends Controller
         ]);
         //$iduser->bukus()->detach();
         //$iduser->bukus()->attach($idbuku);
-        $pinjam->fill($request->post())->save();
+        $rent->fill($request->post())->save();
         return redirect()->route('rent.index')->with('success','Pinjam Has Been updated successfully');
     }
     protected function destroy($id)
