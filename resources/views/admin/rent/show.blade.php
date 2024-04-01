@@ -8,7 +8,7 @@
                     <h2>Detail Peminjaman</h2>
                 </div>
                 <div class="pull-right mb-2">
-                    <a class="btn btn-success" href="{{ route('user.index') }}"> Kembali Ke Index Peminjaman</a>
+                    <a class="btn btn-success" href="{{ route('rent.index') }}"> Kembali Ke Index Peminjaman</a>
                 </div>
             </div>
         </div>
