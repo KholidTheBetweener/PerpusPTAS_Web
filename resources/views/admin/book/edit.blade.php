@@ -1,0 +1,117 @@
+@extends('layouts.dash')
+@section('title', 'Edit Buku')
+@section('content')
+<script src="{{ asset('js/app.js') }}"></script>
+    <div class="container mt-2">
+        <div class="row">
+            <div class="col-lg-12 margin-tb">
+                <div class="pull-left">
+                    <h2>Edit Buku</h2>
+                </div>
+                <div class="pull-right">
+                    <a class="btn btn-primary" href="{{ route('book.index') }}" enctype="multipart/form-data">
+                        Back</a>
+                </div>
+            </div>
+        </div>
+        @if(session('status'))
+        <div class="alert alert-success mb-1 mt-1">
+            {{ session('status') }}
+        </div>
+        @endif
+        <form action="{{ route('book.update',$book) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <strong>Cover:</strong>
+                        <input type="file" name="book_cover" placeholder="Cover Buku" value="{{ $book->book_cover }}"
+                        class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
+                        @error('book_cover')
+                        <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <strong>Nama Buku:</strong>
+                        <input type="text" name="book_title" class="form-control" placeholder="Nama Buku" value="{{ $book->book_title }}">
+                        @error('book_title')
+                        <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <strong>Nomer Buku:</strong>
+                        <input type="text" name="book_code" class="form-control" placeholder="{{ $book->book_code }}">
+                        @error('book_code')
+                        <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <strong>Kategori:</strong>
+                        <select name="category" class="form-control" placeholder="{{ $book->category }}">
+                        @foreach($k as $k)    
+                        <option value="{{ $k->id }}">{{ $k->name }}</option>
+                        @endforeach    
+                        </select>
+                        @error('category')
+                        <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <strong>Author:</strong>
+                        <input type="text" name="author" class="form-control" placeholder="Author Buku" value="{{ $book->author }}">
+                        @error('author')
+                        <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <strong>Publisher:</strong>
+                        <input type="text" name="publisher" class="form-control" placeholder="Publisher Buku" value="{{ $book->publisher }}">
+                        @error('publisher')
+                        <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <strong>Deskripsi Buku:</strong>
+                        <input type="text" name="book_desc" class="form-control" placeholder="Deskripsi Buku" value="{{ $book->book_desc }}">
+                        @error('book_desc')
+                        <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <strong>Barcode:</strong>
+                        <input type="text" name="barcode" placeholder="Barcode Buku" id="scanner" value="{{ $book->barcode }}" />
+                        @error('barcode')
+                        <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <strong>Ketersediaan:</strong>
+                        <input type="number" name="stock" class="form-control" placeholder="Ketersediaan Buku" value="{{ $book->stock }}">
+                        @error('stock')
+                        <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary ml-3">Submit</button>
+            </div>
+        </form>
+    </div>
+@endsection

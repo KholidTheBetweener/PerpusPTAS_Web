@@ -1,0 +1,222 @@
+@extends('layouts.dash')
+@section('title', 'Masukkan Buku Baru')
+@section('content')
+    <div class="container mt-2">
+        <div class="row">
+            <div class="col-lg-12 margin-tb">
+                <div class="pull-left mb-2">
+                    <h2>Tambah Buku</h2>
+                </div>
+                <div class="pull-right">
+                    <a class="btn btn-primary" href="{{ route('book.index') }}"> Back</a>
+                </div>
+            </div>
+        </div>
+        @if(session('status'))
+        <div class="alert alert-success mb-1 mt-1">
+            {{ session('status') }}
+        </div>
+        @endif
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="input-tab" data-bs-toggle="tab" data-bs-target="#inputbook" type="button" role="tab" aria-controls="input" aria-selected="true">Masukkan Data Buku</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="import-tab" data-bs-toggle="tab" data-bs-target="#importbook" type="button" role="tab" aria-controls="import" aria-selected="false">Import Data Buku Melalui Excel</button>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="inputbook" role="tabpanel" aria-labelledby="input-tab">
+  <form action="{{ route('book.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <strong>Cover:</strong>
+                        <input type="file" name="book_cover" placeholder="Cover Buku"
+                        class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
+                        @error('book_cover')
+                        <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <strong>Nama Buku:</strong>
+                        <input type="text" name="book_title" class="form-control" placeholder="Nama Buku">
+                        @error('book_title')
+                        <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <strong>Nomer Buku:</strong>
+                        <input type="text" name="book_code" class="form-control" placeholder="Nomer Buku">
+                        @error('book_code')
+                        <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <strong>Kategori:</strong>
+                        <select name="category" class="form-control" placeholder="Kategori">
+                        @foreach($k as $k)    
+                        <option value="{{ $k->id }}">{{ $k->name }}</option>
+                        @endforeach    
+                        </select>
+                        @error('category')
+                        <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <strong>Author:</strong>
+                        <input type="text" name="author" class="form-control" placeholder="Author Buku">
+                        @error('author')
+                        <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <strong>Publisher:</strong>
+                        <input type="text" name="publisher" class="form-control" placeholder="Publisher Buku">
+                        @error('publisher')
+                        <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <strong>Deskripsi Buku:</strong>
+                        <input type="text" name="book_desc" class="form-control" placeholder="Deskripsi Buku">
+                        @error('book_desc')
+                        <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <strong>Ketersediaan:</strong>
+                        <input type="number" name="stock" class="form-control" placeholder="Ketersediaan Buku">
+                        @error('stock')
+                        <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary ml-3">Submit</button>
+            </div>
+        </form>
+  </div>
+  <div class="tab-pane fade" id="importbook" role="tabpanel" aria-labelledby="import-tab">
+        <form action="{{ route('book.import') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="form-group">
+                            <p>Untuk mengimport data dari file excel ke database, usahakan data berformat berikut pada file excel(baris dan kolum pertama merupakan bagian dari excel, jadi masukkan data-data buku saja di file excel):</p>
+                            <table class='table table-bordered'>
+                                <th>Baris/Kolum</th>
+                                <th>A</th>
+                                <th>B</th>
+                                <th>C</th>
+                                <th>D</th>
+                                <th>E</th>
+                                <th>F</th>
+                                <th>G</th>
+                                <tr>    
+                                <th>1</th>
+                                <td>Kode Kategori</td>
+                                <td>Kode Buku</td>
+                                <td>Judul Buku</td>
+                                <td>Pengarang</td>
+                                <td>Penerbit</td>
+                                <td>Deskripsi Buku</td>
+                                <td>Exemplar</td>
+                                </tr>
+                            </table>
+                            <p>Contoh format file excel:</p>
+                            <table class='table table-bordered'>
+                                <th>Baris/Kolum</th>
+                                <th>A</th>
+                                <th>B</th>
+                                <th>C</th>
+                                <th>D</th>
+                                <th>E</th>
+                                <th>F</th>
+                                <th>G</th>
+                                <tr>    
+                                <th>1</th>
+                                <td>1</td>
+                                <td>1001</td>
+                                <td>PETUALANGAN MENJELAJAH KITAB INJIL DAN KISAH PARA RASUL</td>
+                                <td>RAY. C. STEDMAN</td>
+                                <td>DISCOVERY HOUSE</td>
+                                <td>Cerita tentang para Rasul berdasarkan kitab injil</td>
+                                <td>1</td>
+                                </tr>
+                                <tr>    
+                                <th>2</th>
+                                <td>1</td>
+                                <td>1009</td>
+                                <td>MESKI GENTAR TETAP TEGAR (HABAKUK)</td>
+                                <td>D. MARTIN LLOYD-JONES</td>
+                                <td>PERKANTAS</td>
+                                <td>Nasihat-nasihat tentang kepercayaan diri</td>
+                                <td>2</td>
+                                </tr>
+                            </table>
+                            Berikut merupakan kode untuk setiap kategori:
+                            <table class='table table-bordered'>
+                                <th>Kategori</th><th>Kode</th>
+                                @foreach($d as $d)
+                                <tr>    
+                                <td>{{ $d->name }}</td><td>{{ $d->id }}</td>
+                                </tr>
+                                @endforeach
+                            </table>
+                            <label for="file">Choose Excel File</label>
+                            <input type="file" name="file" id="file" class="form-control">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Import</button>
+                    </form>
+  </div>
+</div>  
+    <!---->
+    <script type="text/javascript">
+        $(document).ready(function () {
+    
+            $('#scanner').val('');  // Input field should be empty on page load
+            $('#scanner').focus();  // Input field should be focused on page load 
+        
+            $('html').on('click', function () {
+                $('#scanner').focus();  // Input field should be focused again if you click anywhere
+            });
+        
+            $('html').on('blur', function () {
+                $('#scanner').focus();  // Input field should be focused again if you blur
+            });
+        
+            $('#scanner').change(function () {
+        
+                if ($('#scanner').val() == '') {
+                    return;  // Do nothing if input field is empty
+                }
+        
+                $.ajax({
+                    url: '/scan/save',
+                    cache: false,
+                    type: 'GET',
+                    data: {
+                        user_id: $('#scanner').val()
+                    },
+                    success: function (response) {
+                        $('#scanner').val('');
+                    }
+                });
+            });
+        });
+        </script>
+@endsection

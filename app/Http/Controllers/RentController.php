@@ -1,0 +1,197 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Rent;
+use Illuminate\Http\Request;
+use App\Providers\RouteServiceProvider;
+use App\Models\Admin;
+use App\Models\User;
+use App\Models\Book;
+use Carbon\Carbon;
+use Illuminate\Notifications\Notification;
+use Illuminate\Http\JsonResponse;
+use App\Notifications\RentAlert;
+use App\Notifications\RentOverdue;
+use App\Notifications\RentApprove;
+use App\Notifications\RentReject;
+use App\Notifications\RentReturn;
+use App\Events\NewRentNotify;
+
+class RentController extends Controller
+{
+    
+    protected function all()
+    {
+        $rows = Rent::query()->orderBy('updated_at', 'desc')->paginate(10); // the rows will be in data key
+        $now = Carbon::now();
+        return view('admin.rent.all', compact('rows', 'now'));
+    }
+    protected function search()
+    {
+        return view('admin.rent.search');
+    }
+    protected function track(Request $request)
+    {
+        //$rents = Rent::paginate(5); // Table-1
+        //$books = Book::all();   // Table-2
+        //$users = User::all(); 
+        //$query = $request->name;
+        $rows = Rent::query()
+        ->join('books', 'books.id', 'rents.books_id')
+        ->join('users', 'users.id', 'rents.users_id') //just guessing here
+        ->where(function($query) use ($request) {
+            $query->where('books.book_code','like',"%{$request->name}%")
+            ->orWhere('books.book_title','like',"%{$request->name}%")
+            ->orWhere('books.barcode','like',"%{$request->name}%")
+            ->orWhere('users.name','like',"%{$request->name}%")
+            ->orWhere('users.phone','like',"%{$request->name}%")
+            ->orWhere('users.email','like',"%{$request->name}%");
+        })->orderBy('rents.created_at', 'desc')
+        ->paginate(10);
+        $now = Carbon::now();
+        return view('admin.rent.all', compact('rows', 'now'));
+    }
+    protected function approve(Request $request, Rent $rent)
+    {
+        $book = Book::find($rent->books_id);
+        $book->stock = $book->stock - 1;
+        $book->save();
+        //buku dipinjam kurang 1
+        $rent->date_rent = Carbon::now();
+        $rent->date_due = Carbon::now()->addWeeks(2);
+        $rent->status = true;
+        $rent->save();
+        $user = User::find($rent->users_id);
+        $user->notify(new RentApprove($rent));
+        if ($book->stock == 0 || $book->stock < 0){
+            $dels = Rent::where('books_id', $book->id)->whereNull('status')->get();
+           foreach($dels as $del)
+            {
+            User::find($del->users_id)->notify(new RentReject($del));
+            $del->delete();
+            } 
+            return redirect()->route('rent.index')->with('success','Peminjaman telah disetujui dan pengajuan peminjaman untuk buku yang sama ditolak');
+        }
+        else
+            {
+                return redirect()->route('rent.index')->with('success','Peminjaman telah disetujui');
+            }
+    }
+    protected function return(Request $request, Rent $rent)
+    {
+        $book = Book::find($rent->books_id);
+        $book->stock = $book->stock + 1;
+        $book->save();
+        //buku dikembalikan tambah 1
+        $rent->date_return = Carbon::now();
+        $rent->status = false;
+        $rent->save();
+        User::find($rent->users_id)->notify(new RentReturn($rent));
+        return redirect()->route('rent.index')->with('success','Buku Telah dikembalikan');
+    }
+    protected function alert(Request $request, Rent $rent)
+    {
+        User::find($rent->users_id)->notify(new RentAlert($rent));
+        return redirect()->route('rent.index')->with('success','Peringatan telat pengembalian telah dikirim');
+    }
+    protected function warning(Request $request, Rent $rent)
+    {
+        User::find($rent->users_id)->notify(new RentOverdue($rent));
+        return redirect()->route('rent.index')->with('success','Peringatan telat pengembalian telah dikirim');
+    }
+    protected function index(Request $request)
+    {
+        //$rows = Rent::query()->with(['book', 'user'])->paginate(5)->toArray(); // the rows will be in data key
+        $query = Rent::query();
+        if ($request->type == 'pending') {
+            $query = $query->whereNull('status')->whereNotNull('date_request');
+        } 
+        elseif ($request->type == 'renting'){
+            $query = $query->where('status', true)->whereNotNull('date_rent')->where('date_due', '>', Carbon::now());
+        }
+        elseif ($request->type == 'overdue'){
+            $query = $query->where('status', true)->where('date_due', '<', Carbon::now());
+        }
+        elseif ($request->type == 'finish'){
+            $query = $query->where('status', false)->whereNotNull('date_return');
+        }
+        else
+        {
+            $query = $query->whereNull('status')->whereNotNull('date_request');
+        }
+        //$query->user()->exists();//check if corresponding table record existed
+        //$query->book()->exists();
+        $rows = $query->orderBy('updated_at', 'desc')->paginate(10);
+        //dd($rows);
+        return view('admin.rent.index', ['rows' => $rows]);
+    }
+    
+    protected function show($id)
+    {
+        $pinjam = Rent::find($id);
+        return view('admin.rent.show',compact('pinjam'));
+    }
+    public function create()
+    {
+        $user = User::pluck('name','id')->toArray();
+        $book = Book::pluck('book_title','id')->toArray();
+        return view('admin.rent.create', compact('user', 'book'));
+    }
+    protected function store(Request $request)
+    {
+        //select2
+        $iduser = User::find($request->name);
+        $idbuku = Book::find($request->book_title);
+        $rent = Rent::create([
+            'books_id' => $idbuku->id,
+            'users_id' => $iduser->id,
+        ]);
+        event(new NewRentNotify($rent));
+        //$iduser->bukus()->attach($idbuku);
+        return redirect()->route('rent.index')->with('success','Pinjam has been created successfully.');
+    }
+    public function edit(Rent $rent)
+    {
+        $user = User::all();
+        $book = Book::all();
+        return view('admin.rent.edit', compact('user', 'book', 'rent'));
+    }
+    protected function update(Request $request, Rent $ent)
+    {
+        $iduser = User::where('email','like','%' . request('name') . '%')->first();
+        $idbuku = Book::where('book_title','like','%' . request('book_title') . '%')->first();
+        $request->validate([
+            'books_id' => $idbuku,
+            'users_id' => $iduser,
+            'date_request' => $request['date_request'],
+            'date_rent' => $request['date_rent'],
+            'status' => $request['status'],
+        ]);
+        //$iduser->bukus()->detach();
+        //$iduser->bukus()->attach($idbuku);
+        $rent->fill($request->post())->save();
+        return redirect()->route('rent.index')->with('success','Pinjam Has Been updated successfully');
+    }
+    protected function destroy($id)
+    {
+        $rent = Rent::find($id);
+        User::find($rent->users_id)->notify(new RentReject($rent));
+        $success = $rent->delete();
+        if($success)
+            return redirect()->route('rent.index')->with('success','Pinjam has been deleted successfully');
+        else
+            return redirect()->route('rent.index')->with('success','Pinjam has fail to delete');
+    }
+    /*protected function denied($id)
+    {
+        $rents = Rent::where('books_id', $id)->whereNull('status');
+        foreach($rents as $rent)
+        {User::find($rent->users_id)->notify(new RentReject($rent));
+        $success = $rent->delete();}
+        if($success)
+            return redirect()->route('rent.index')->with('success','Peminjaman telah disetujui dan stock habis maka lainnya di tolak');
+        else
+            return redirect()->route('rent.index')->with('success','Pinjam has fail to delete');
+    }*/
+}
