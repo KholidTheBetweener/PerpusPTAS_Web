@@ -1,6 +1,6 @@
 <header>
 <!-- Navbar -->
-<nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm">
+<nav class="navbar sticky-top navbar-expand-md navbar-dark bg-dark shadow-sm fixed-top">
     <!-- Left navbar links -->
     <button class="btn btn-dark" id="button-toggle">
             <i class="bi bi-list"></i>
