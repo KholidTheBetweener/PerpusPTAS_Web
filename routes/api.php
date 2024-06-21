@@ -13,6 +13,7 @@ use App\Http\Controllers\API\RentController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\CategoriesController;
 use App\Http\Controllers\API\NotificationController;
+use App\Http\Controllers\PasswordChangeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +30,14 @@ Route::post('forgot-password', [RegisterController::class, 'forgot_password']);
 Route::group(['middleware' => 'auth:api'], function () {
     Route::post('reset-password', [RegisterController::class, 'passwordReset']);
     Route::post('change-password', [RegisterController::class, 'change_password']);
+});
+
+Route::post('change-password-dummy',  function (Request $request) {
+    // Dummy response
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Password changed successfully'
+    ]);
 });
 
 Route::controller(RegisterController::class)->group(function(){

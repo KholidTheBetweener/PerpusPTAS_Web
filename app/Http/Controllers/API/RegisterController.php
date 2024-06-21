@@ -103,33 +103,30 @@ class RegisterController extends BaseController
     {
         $input = $request->all();
         $userid = Auth::guard('api')->user()->id;
-        $rules = array(
+        $rules = [
             'old_password' => 'required',
             'new_password' => 'required|min:6',
             'confirm_password' => 'required|same:new_password',
-        );
+        ];
         $validator = Validator::make($input, $rules);
         if ($validator->fails()) {
-            $arr = array("status" => 400, "message" => $validator->errors()->first(), "data" => array());
+            return response()->json(['status' => 400, 'message' => $validator->errors()->first(), 'data' => []]);
         } else {
             try {
-                if ((Hash::check(request('old_password'), Auth::user()->password)) == false) {
-                    $arr = array("status" => 400, "message" => "Check your old password.", "data" => array());
-                } else if ((Hash::check(request('new_password'), Auth::user()->password)) == true) {
-                    $arr = array("status" => 400, "message" => "Please enter a password which is not similar then current password.", "data" => array());
+                $user = Auth::guard('api')->user();
+                if (!Hash::check($request->old_password, $user->password)) {
+                    return response()->json(['status' => 400, 'message' => 'Check your old password.', 'data' => []]);
+                } elseif (Hash::check($request->new_password, $user->password)) {
+                    return response()->json(['status' => 400, 'message' => 'Please enter a password which is not similar to the current password.', 'data' => []]);
                 } else {
-                    User::where('id', $userid)->update(['password' => Hash::make($input['new_password'])]);
-                    $arr = array("status" => 200, "message" => "Password updated successfully.", "data" => array());
+                    $user->password = Hash::make($request->new_password);
+                    $user->save();
+                    return response()->json(['status' => 200, 'message' => 'Password updated successfully.', 'data' => []]);
                 }
             } catch (\Exception $ex) {
-                if (isset($ex->errorInfo[2])) {
-                    $msg = $ex->errorInfo[2];
-                } else {
-                    $msg = $ex->getMessage();
-                }
-                $arr = array("status" => 400, "message" => $msg, "data" => array());
+                $msg = $ex->getMessage();
+                return response()->json(['status' => 400, 'message' => $msg, 'data' => []]);
             }
         }
-        return \Response::json($arr);
     }
 }
