@@ -27,6 +27,18 @@ class HomeController extends Controller
     {
         return view('home');
     }
+    public function dashboard()
+    {
+        $admin = Admin::count();
+        $user = User::count();
+        $book = Book::count();
+        $apply = Rent::whereNull('status')->whereNotNull('date_request')->count();
+        $rent = Rent::where('status', true)->whereNotNull('date_rent')->count();
+        $due = Rent::where('date_due', '<', Carbon::now())->where('status', true)->count();
+        //gak bisa lihat notif admin
+        $notifications = Auth::guard('admin')->user()->unreadNotifications;
+        return view('admin', compact('admin', 'user', 'book', 'apply', 'rent', 'due', 'notifications'));
+    }
     public function markNotification($id)
     {
         $user = \Auth::guard('admin')->user();

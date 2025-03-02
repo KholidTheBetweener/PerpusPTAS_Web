@@ -27,8 +27,19 @@ use Carbon\Carbon;
 
 Route::get('/', function () {
     return view('welcome');
-});
-
+})->name('welcome');
+Route::get('/profile', function () {
+    return view('profile');
+})->name('profile');
+Route::get('/about', function () {
+    return view('about');
+})->name('about');
+Route::get('/contact', function () {
+    return view('contact');
+})->name('contact');
+Route::get('/download', function () {
+    return view('download');
+})->name('download');
 Auth::routes();
 /*Route::namespace('Auth')->group(function(){
         
@@ -61,17 +72,7 @@ Route::get('/admin/password/reset/{token}',[App\Http\Controllers\Auth\AdminReset
 Route::post('/admin/password/reset',[App\Http\Controllers\Auth\AdminResetPasswordController::class, 'reset'])->name('admin.password.update');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/admin/dashboard',function(){
-    $admin = Admin::count();
-    $user = User::count();
-    $book = Book::count();
-    $apply = Rent::whereNull('status')->whereNotNull('date_request')->count();
-    $rent = Rent::where('status', true)->whereNotNull('date_rent')->count();
-    $due = Rent::where('date_due', '<', Carbon::now())->where('status', true)->count();
-    //gak bisa lihat notif admin
-    $notifications = Auth::guard('admin')->user()->unreadNotifications;
-    return view('admin', compact('admin', 'user', 'book', 'apply', 'rent', 'due', 'notifications'));
-})->middleware('auth:admin')->name('admin.dashboard');
+Route::get('/admin/dashboard',[App\Http\Controllers\HomeController::class, 'dashboard'])->middleware('auth:admin')->name('admin.dashboard');
 Route::post('/admin/mark-as-read/{id}', [NotificationController::class, 'markNotification'])->name('admin.markNotification');
 Route::post('/admin/mark-as-read', [NotificationController::class, 'markAll'])->name('admin.markAll');
 //notify

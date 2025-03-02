@@ -5,9 +5,9 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
         <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
-            <h1>Selamat Datang Di Website Perpustakaan Perkantas</h1>
+            <h1>Contact</h1>
                 <h1>
-                     Silahkan Pilih Tipe Akun Yang Ingin Digunakan:
+                     Jika ada masalah Hubungi:
                 </h1>
                 <div class=" row-cols-1 row-cols-md2 g-4">
                 <table>
@@ -18,12 +18,12 @@
                     <a href="{{route('download')}}" class="underline text-gray-900 dark:text-white">
                         <div class="card">
                         <div class="card-header">
-                        <div class="ml-4 text-lg leading-7 font-semibold card-title" text-align="center">Anggota</div>
+                        <div class="ml-4 text-lg leading-7 font-semibold card-title" text-align="center">Website</div>
                         </div>
                         <div class="card-body">
                             <div class="ml-12">
                                 <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm card-text">
-                                Pilih Anggota jika ingin meminjam buku, disarankan menggunakan aplikasi peminjaman android yang telah disediakan untuk login
+                                Pemegang Website
                                 </div>
                             </div>
                         </div>
@@ -36,12 +36,12 @@
                     <a href="{{route('admin.login-view')}}" class="underline text-gray-900 dark:text-white">
                         <div class="card">
                         <div class="card-header">
-                        <div class="ml-4 text-lg leading-7 font-semibold card-title" text-align="center">Admin</div>
+                        <div class="ml-4 text-lg leading-7 font-semibold card-title" text-align="center">Staff</div>
                         </div>
                         <div class="card-body">                            
                             <div class="ml-12">
                                 <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm card-text">
-                                Pilih Admin jika ingin mengelola akun, buku, dan catatan peminjaman perpustakaan
+                                Hal-hal berhubungan perpustakaan
                                 </div>
                             </div>
                         </div>

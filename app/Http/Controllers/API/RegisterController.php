@@ -101,32 +101,36 @@ class RegisterController extends BaseController
     }
     public function change_password(Request $request)
     {
-        $input = $request->all();
-        $userid = Auth::guard('api')->user()->id;
-        $rules = [
-            'old_password' => 'required',
-            'new_password' => 'required|min:6',
-            'confirm_password' => 'required|same:new_password',
-        ];
-        $validator = Validator::make($input, $rules);
-        if ($validator->fails()) {
-            return response()->json(['status' => 400, 'message' => $validator->errors()->first(), 'data' => []]);
-        } else {
-            try {
-                $user = Auth::guard('api')->user();
-                if (!Hash::check($request->old_password, $user->password)) {
-                    return response()->json(['status' => 400, 'message' => 'Check your old password.', 'data' => []]);
-                } elseif (Hash::check($request->new_password, $user->password)) {
-                    return response()->json(['status' => 400, 'message' => 'Please enter a password which is not similar to the current password.', 'data' => []]);
-                } else {
-                    $user->password = Hash::make($request->new_password);
-                    $user->save();
-                    return response()->json(['status' => 200, 'message' => 'Password updated successfully.', 'data' => []]);
-                }
-            } catch (\Exception $ex) {
-                $msg = $ex->getMessage();
-                return response()->json(['status' => 400, 'message' => $msg, 'data' => []]);
-            }
-        }
+        $validator=Validator::make($request->all(),[
+            'old_password'        =>'required',
+            'new_password'         =>'required|min:8|max:30',
+            'confirm_password' =>'required|same:new_password'
+         ]);
+         if ($validator->fails()) {
+            return response()->json([
+               'message'=>'validations fails',
+               'errors' =>$validator->errors()
+            ],422);
+         }
+         $user=$request->user();
+   
+         if (Hash::check($request->old_password,$user->password)) {
+            $user->update([
+               'password'=>Hash::make($request->new_password)
+            ]);
+   
+   
+            return response()->json([
+               'message'=>' password successfully updated',
+               'errors' =>$validator->errors()
+            ],200);
+         }
+         else
+         {
+            return response()->json([
+               'message'=>'old password does not match',
+               'errors' =>$validator->errors()
+            ],422);
+         }
     }
 }

@@ -56,7 +56,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('checkProfile', [UserController::class, 'isProfileComplete']);
     Route::post('myProfile', [UserController::class, 'update']);
     Route::post('photo', [UserController::class, 'store']);
-    Route::post('password', [UserController::class, 'password']);
+    Route::post('password', [RegisterController::class, 'change_password']);
     Route::resource('books', BookController::class);
     Route::resource('rent', RentController::class);
 });
