@@ -86,7 +86,7 @@ li {
 <!-- Navbar -->
 <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm">
     <!-- Left navbar links -->
-    <a class="navbar-brand navbar-nav ms-auto" href="#"><img src="https://www.perkantas-semarang.org/wp-content/uploads/2015/07/logoptas_s1.png"></a>
+    <a class="navbar-brand navbar-nav ms-auto" href="#"><img src="https://researcheve.com/public/assets/images/perkantas.png" width="250" height="50"></a>
     <button
       class="navbar-toggler"
       type="button"
@@ -101,6 +101,38 @@ li {
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Right Side Of Navbar -->
+            @if(Auth::check()) 
+            <ul class="navbar-nav ms-auto">
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link" href="{{ route('userprofile') }}" role="button">
+                                    {{ Auth::user()->name }}
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown">
+                            <a class="nav-link" href="{{ route('home') }}" role="button">
+                                    Buku Perpustakaan
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown">
+                            <a class="nav-link" href="{{ route('notifications') }}" role="button">
+                                    Notifikasi
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link" href="{{ route('rent') }}" role="button">
+                                    Riwayat Peminjaman
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown">
+                            <a class="dropdown-item" href="#" onclick="event.preventDefault();document.querySelector('#admin-logout-form').submit();">
+                                Logout
+                            </a>
+                            <form id="admin-logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>        
+                            </li>
+            </ul>
+            @else
             <ul class="navbar-nav ms-auto">
                 <!-- Authentication Links -->
                 <li class="nav-item">
@@ -129,6 +161,7 @@ li {
                         </a>
                     </li>
             </ul>
+            @endif
         </div>
   </nav>
   <!-- /.navbar -->

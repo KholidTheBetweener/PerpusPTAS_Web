@@ -5,7 +5,7 @@
     <button class="btn btn-dark" id="button-toggle">
             <i class="bi bi-list"></i>
           </button>
-    <a class="navbar-brand" href="#">Perpustakaan Perkantas</a>
+          <a class="navbar-brand navbar-nav ms-auto" href="#"><img src="https://researcheve.com/public/assets/images/perkantas.png" width="250" height="50"></a>
     <button
       class="navbar-toggler"
       type="button"
@@ -24,7 +24,7 @@
                 <!-- Authentication Links -->
                 @if(Auth::guard('admin')->check())
                     <li class="nav-item dropdown">
-                        <a id="adminDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                        <a id="adminDropdown" class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                             {{ Auth::user()->username }} <span class="caret"></span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="adminDropdown">

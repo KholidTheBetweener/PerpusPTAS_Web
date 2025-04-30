@@ -33,7 +33,7 @@
                     </td>
                     <td>
                     <div class="col">
-                    <a href="{{route('admin.login-view')}}" class="underline text-gray-900 dark:text-white">
+                    <a href="whatsapp.com/channel/0029VadEsYC9MF8vOfxNpx2B" class="underline text-gray-900 dark:text-white">
                         <div class="card">
                         <div class="card-header">
                         <div class="ml-4 text-lg leading-7 font-semibold card-title" text-align="center">Staff</div>
@@ -41,7 +41,8 @@
                         <div class="card-body">                            
                             <div class="ml-12">
                                 <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm card-text">
-                                Hal-hal berhubungan perpustakaan
+                                WA: Perkantas Semarang
+
                                 </div>
                             </div>
                         </div>

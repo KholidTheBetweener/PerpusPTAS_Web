@@ -13,7 +13,7 @@
                 <table>
                     <tbody>
                     <tr>
-                    <td>
+                    <td  colspan="2">
                     <div class="col">
                     <a href="https://drive.google.com/drive/folders/1LpBLzKiLGwzk2zbyXv37uWfTpFSPk77i" class="underline text-gray-900 dark:text-white">
                         <div class="card">
@@ -24,6 +24,46 @@
                             <div class="ml-12">
                                 <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm card-text">
                                 Download APK Perpustakaan Perkantas
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </a>
+                    </div>
+                    </td>
+                    </tr>
+                    <tr>
+                    <td>
+                    <p>Register Akun Melalui Website:</p>
+                    <div class="col">
+                    <a href="{{route('register')}}" class="underline text-gray-900 dark:text-white">
+                        <div class="card">
+                        <div class="card-header">
+                        <div class="ml-4 text-lg leading-7 font-semibold card-title" text-align="center">Register</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="ml-12">
+                                <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm card-text">
+                                Register Akun Baru Anggota
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </a>
+                    </div>
+                    </td>
+                    <td>
+                    <p>Login Akun Melalui Website:</p>
+                    <div class="col">
+                    <a href="{{route('login')}}" class="underline text-gray-900 dark:text-white">
+                        <div class="card">
+                        <div class="card-header">
+                        <div class="ml-4 text-lg leading-7 font-semibold card-title" text-align="center">Login</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="ml-12">
+                                <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm card-text">
+                                Login Anggota Perpustakaan
                                 </div>
                             </div>
                         </div>

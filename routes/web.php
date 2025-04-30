@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BookController;
@@ -57,6 +58,19 @@ Auth::routes();
     Route::post('/password/reset','ResetPasswordController@reset')->name('password.update');
 
 });*/
+//
+Route::get('/books/{id}', [HomeController::class, 'show'])->name('detail');
+Route::get('/notifications',[HomeController::class,'notifications'])->name('notifications');
+Route::post('/notifications/{id}', [HomeController::class, 'marknotify'])->name('marknotify');
+Route::post('/notifications/all', [HomeController::class, 'marknotifyall'])->name('marknotifyall');
+Route::get('/userprofile',[HomeController::class,'profile'])->name('userprofile');
+Route::post('/userprofile/{id}',[HomeController::class,'update'])->name('userupdate');
+Route::post('/emailpassword',[HomeController::class,'emailpassword'])->name('emailpassword');
+Route::get('/search',[HomeController::class,'search'])->name('search');
+Route::get('/rent',[HomeController::class,'rent'])->name('rent');
+Route::post('/book/{id}/rent', [HomeController::class, 'store'])->name('requestrent');
+Route::get('/rent/{id}',[HomeController::class,'rentinfo'])->name('rentinfo');
+//
 Route::get('/admin',[LoginController::class,'showAdminLoginForm'])->name('admin.login-view');
 Route::post('/admin',[LoginController::class,'adminLogin'])->name('admin.login');
 //Route::post('admin/logout',[LoginController::class,'adminLogout'])->name('admin.logout');
@@ -78,7 +92,6 @@ Route::post('/admin/mark-as-read', [NotificationController::class, 'markAll'])->
 //notify
 Route::get('/send-notification', [NotificationController::class, 'sendNotification']);
 //Admin Resource
-
 Route::get('/admin/rent/all',[RentController::class,'all'])->middleware('auth:admin')->name('rent.record');
 Route::get('/admin/rent/search',[RentController::class,'search'])->middleware('auth:admin')->name('rent.search');
 Route::get('/admin/rent/track',[RentController::class,'track'])->middleware('auth:admin')->name('rent.track');
@@ -91,7 +104,7 @@ Route::get('/admin/rent/alert/{rent}',[RentController::class,'alert'])->middlewa
 Route::post('/admin/rent/return/{rent}',[RentController::class,'return'])->middleware('auth:admin')->name('rent.return');
 Route::get('/admin/rent/warning/{rent}',[RentController::class,'warning'])->middleware('auth:admin')->name('rent.warning');
 Route::get('/admin/user/search',[UserController::class,'search'])->middleware('auth:admin')->name('user.search');
-Route::get('/admin/book/search',[BookController::class,'search'])->middleware('auth:admin')->name('book.search');
+Route::get('/book/search',[BookController::class,'search'])->name('book.search');
 Route::resource('/admin/admin',AdminController::class)->middleware('auth:admin');
 Route::resource('/admin/user',UserController::class)->middleware('auth:admin');
 Route::resource('/admin/book',BookController::class)->middleware('auth:admin');

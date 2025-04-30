@@ -1,4 +1,4 @@
-@extends('layouts.dash')
+@extends('layouts.app')
 @section('title', 'Detail Peminjaman')
 @section('content')
     <div class="container mt-2">
@@ -8,7 +8,7 @@
                     <h2>Detail Peminjaman</h2>
                 </div>
                 <div class="pull-right mb-2">
-                    <a class="btn btn-success" href="{{ route('rent.index') }}"> Kembali Ke Index Peminjaman</a>
+                    <a class="btn btn-success" href="{{ route('rent') }}"> Kembali Ke Riwayat Peminjaman</a>
                 </div>
             </div>
         </div>
