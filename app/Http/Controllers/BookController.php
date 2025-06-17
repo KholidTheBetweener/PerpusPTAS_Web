@@ -35,7 +35,6 @@ class BookController extends Controller
             $request->validate([
                 'file' => 'required|mimes:csv,xls,xlsx',
             ]);
-     
             // Get the uploaded file
             $file = $request->file('file');
             $import = new BookImport;
@@ -43,8 +42,9 @@ class BookController extends Controller
             Excel::import($import, $file);
             $users = User::all();
             //how to count in excel?
+            //dd($import);
             Notification::send($users, new ImportBookNotification($import->getRowCount));
-            return redirect()->back()->with('success', 'Excel file imported successfully!');
+            return redirect()->route('book.index')->with('success', 'Excel file imported successfully!');
         }
     protected function index()
     {

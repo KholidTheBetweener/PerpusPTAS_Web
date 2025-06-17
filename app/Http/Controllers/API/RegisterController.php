@@ -74,15 +74,18 @@ class RegisterController extends BaseController
             'email' => "required|email"
         ]);
         if ($validator->fails()) {
-            return response()->json($validator->errors());
+            return response()->json($validator->errors(), 404);
         }
     $response = Password::sendResetLink($input);
-
-    $message = $response == Password::RESET_LINK_SENT ? 'Mail send successfully' : GLOBAL_SOMETHING_WANTS_TO_WRONG;
+    $message = [
+        'success' => true,
+        'data'    => $validator,
+    ];
+    $message['message'] = $response == Password::RESET_LINK_SENT ? 'Mail send successfully' : GLOBAL_SOMETHING_WANTS_TO_WRONG;
     
     return response()->json($message);
     }
-    public function passwordReset(Request $request){
+    /*public function passwordReset(Request $request){
         $input = $request->only('email','token', 'password', 'password_confirmation');
         $validator = Validator::make($input, [
             'token' => 'required',
@@ -98,8 +101,8 @@ class RegisterController extends BaseController
         });
         $message = $response == Password::PASSWORD_RESET ? 'Password reset successfully' : GLOBAL_SOMETHING_WANTS_TO_WRONG;
         return response()->json($message);
-    }
-    public function change_password(Request $request)
+    }*/
+    /*public function change_password(Request $request)
     {
         $validator=Validator::make($request->all(),[
             'old_password'        =>'required',
@@ -132,5 +135,13 @@ class RegisterController extends BaseController
                'errors' =>$validator->errors()
             ],422);
          }
+    }*/
+    public function logout(): JsonResponse
+    {
+        $user = \Auth::user();
+        $user->tokens()->delete();
+        return response()->json([
+            'message'=>' logout successfully'
+         ],200);
     }
 }

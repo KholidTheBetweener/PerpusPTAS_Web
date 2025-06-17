@@ -10,6 +10,7 @@ use App\Http\Controllers\API\BaseController as BaseController;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends BaseController
 {
@@ -23,12 +24,12 @@ class UserController extends BaseController
     {
         $user = \Auth::user();
         $arraynull = [];
-        if (!$user->name) {
+        /*if (!$user->name) {
             $arraynull[] = "Nama";
         }
         if (!$user->email) {
             $arraynull[] = "Email";
-        }
+        }*/
         if (!$user->birth_place) {
             $arraynull[] = "Tempat Lahir";
         }
@@ -54,9 +55,9 @@ class UserController extends BaseController
     public function show(): JsonResponse
     {
         $user = \Auth::user();  
-        if (is_null($user)) {
+        /*if (is_null($user)) {
             return $this->sendError('user not found.');
-        }
+        }*/
    
         return $this->sendResponse(new UserResource($user), 'User retrieved successfully.');
     }
@@ -70,12 +71,39 @@ class UserController extends BaseController
      */
     public function password(Request $request): JsonResponse
     {
-        //email validator
-        $validator = Validator::make($request, [
-            'password' => 'required',
-            'c_password' => 'required|same:password',
-        ]);
+        $validator=Validator::make($request->all(),[
+            'old_password'        =>'required',
+            'new_password'         =>'required|min:8|max:30',
+            'confirm_password' =>'required|same:new_password'
+         ]);
+         if ($validator->fails()) {
+            return $this->sendError('Validation Fails.', $validator->errors(), 422);
+            /*return response()->json([
+               'message'=>'validations fails',
+               'errors' =>$validator->errors()
+            ],422);*/
+         }
+         $user=$request->user();
    
+         if (Hash::check($request->old_password,$user->password)) {
+            $user->update([
+               'password'=>Hash::make($request->new_password)
+            ]);
+            return $this->sendResponse(new UserResource($user), 'User password updated successfully.');
+            /*return response()->json([
+               'message'=>' password successfully updated',
+               'errors' =>$validator->errors()
+            ],200);*/
+         }
+         else
+         {
+            return $this->sendError('Old Password Does Not Match', $validator->errors(), 422);
+            /*return response()->json([
+               'message'=>'old password does not match',
+               'errors' =>$validator->errors()
+            ],422);*/
+         }
+/*
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
@@ -85,7 +113,7 @@ class UserController extends BaseController
         }
         $user->password = bcrypt($request['password']);
         $user->save();
-        return $this->sendResponse(new UserResource($user), 'User password updated successfully.');
+        return $this->sendResponse(new UserResource($user), 'User password updated successfully.');*/
     }
     protected function store(Request $request)
     {
@@ -128,7 +156,7 @@ class UserController extends BaseController
         $user->component = $input['component'];
         $user->save();
    
-        return $this->sendResponse(new UserResource($user), 'Rent updated successfully.');
+        return $this->sendResponse(new UserResource($user), 'User updated successfully.');
     }
    
 }

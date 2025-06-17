@@ -18,17 +18,17 @@ use App\Notifications\NewUserNotification;
 
 class NotificationController extends Controller
 {
-    public function __construct()
+    /*public function __construct()
     {
         $this->middleware('auth:admin');
     }
   
-    public function index()
+    /*public function index()
     {
         return view('product');
-    }
+    }*/
     
-    public function sendNotification() {
+    /*public function sendNotification() {
         $admin = Admin::all();
   $user = [
     'name' => 'BOGO',
@@ -41,8 +41,8 @@ class NotificationController extends Controller
         Notification::send($admin, new NewUserNotification($user));
    
         dd('Task completed!');
-    }
-    public function markNotification($id)
+    }*/
+    /*public function markNotification($id)
     {
         $user = \Auth::guard('admin')->user();
         $notification = $user->notifications->where('id', $id)->first();
@@ -60,5 +60,5 @@ class NotificationController extends Controller
             $notification->markAsRead();
         return redirect()->route('admin.dashboard')->with('success','Semua Notifikasi Sudah Terbaca');
         }
-    }    
+    }*/    
 }

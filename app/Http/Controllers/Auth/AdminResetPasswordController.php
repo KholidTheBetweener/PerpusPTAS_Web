@@ -50,7 +50,6 @@ class AdminResetPasswordController extends Controller
             ['token' => $token, 'email' => $request->email]
         );
     }
-
     /**
      * Get the broker to be used during password reset.
      *
@@ -59,7 +58,6 @@ class AdminResetPasswordController extends Controller
     protected function broker(){
         return Password::broker('admins');
     }
-
     /**
      * Get the guard to be used during password reset.
      *

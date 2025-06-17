@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class PasswordChangeController extends Controller
 {
-    public function changePassword(Request $request)
+    /*public function changePassword(Request $request)
     {
         // Dummy data validation (you can customize this)
         $request->validate([
@@ -19,5 +19,5 @@ class PasswordChangeController extends Controller
             'status' => 'success',
             'message' => 'Password changed successfully'
         ]);
-    }
+    }*/
 }

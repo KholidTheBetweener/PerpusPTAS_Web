@@ -27,18 +27,18 @@ use App\Http\Controllers\PasswordChangeController;
 */
 Route::post('forgot-password', [RegisterController::class, 'forgot_password']);
 
-Route::group(['middleware' => 'auth:api'], function () {
+/*Route::group(['middleware' => 'auth:api'], function () {
     Route::post('reset-password', [RegisterController::class, 'passwordReset']);
     Route::post('change-password', [RegisterController::class, 'change_password']);
-});
+});*/
 
-Route::post('change-password-dummy',  function (Request $request) {
+/*Route::post('change-password-dummy',  function (Request $request) {
     // Dummy response
     return response()->json([
         'status' => 'success',
         'message' => 'Password changed successfully'
     ]);
-});
+});*/
 
 Route::controller(RegisterController::class)->group(function(){
     Route::post('register', 'register');
@@ -56,7 +56,8 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('checkProfile', [UserController::class, 'isProfileComplete']);
     Route::post('myProfile', [UserController::class, 'update']);
     Route::post('photo', [UserController::class, 'store']);
-    Route::post('password', [RegisterController::class, 'change_password']);
+    Route::post('password', [UserController::class, 'password']);
+    Route::post('logout', [RegisterController::class, 'logout']);
     Route::resource('books', BookController::class);
     Route::resource('rent', RentController::class);
 });

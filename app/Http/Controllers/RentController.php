@@ -141,8 +141,8 @@ class RentController extends Controller
     protected function store(Request $request)
     {
         //select2
-        $iduser = User::find($request->name);
-        $idbuku = Book::find($request->book_title);
+        $iduser = User::where('name','like','%' . request('name') . '%')->first();
+        $idbuku = Book::where('book_title','like','%' . request('book_title') . '%')->first();
         $rent = Rent::create([
             'books_id' => $idbuku->id,
             'users_id' => $iduser->id,
@@ -157,20 +157,25 @@ class RentController extends Controller
         $book = Book::all();
         return view('admin.rent.edit', compact('user', 'book', 'rent'));
     }
-    protected function update(Request $request, Rent $ent)
+    protected function update(Request $request, Rent $rent)
     {
         $iduser = User::where('email','like','%' . request('name') . '%')->first();
         $idbuku = Book::where('book_title','like','%' . request('book_title') . '%')->first();
         $request->validate([
-            'books_id' => $idbuku,
-            'users_id' => $iduser,
-            'date_request' => $request['date_request'],
-            'date_rent' => $request['date_rent'],
-            'status' => $request['status'],
+            'books_id' => 'required',
+            'users_id' => 'required',
+            'date_request' => 'required',
+            'status' => 'required',
         ]);
-        //$iduser->bukus()->detach();
-        //$iduser->bukus()->attach($idbuku);
-        $rent->fill($request->post())->save();
+        $input = $request->all();
+        $rent->fill([
+            'books_id' => $input['books_id'],
+            'users_id' =>$input['users_id'],
+            'date_request' => $input['date_request'],
+            'date_rent' => $input['date_rent'],
+            'status' => $input['status'],
+        ])->save();
+        //dd($rent);
         return redirect()->route('rent.index')->with('success','Pinjam Has Been updated successfully');
     }
     protected function destroy($id)
@@ -180,8 +185,8 @@ class RentController extends Controller
         $success = $rent->delete();
         if($success)
             return redirect()->route('rent.index')->with('success','Pinjam has been deleted successfully');
-        else
-            return redirect()->route('rent.index')->with('success','Pinjam has fail to delete');
+        //else
+            //return redirect()->route('rent.index')->with('success','Pinjam has fail to delete');
     }
     /*protected function denied($id)
     {

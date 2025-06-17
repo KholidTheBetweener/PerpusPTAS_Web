@@ -47,6 +47,7 @@ class Rent extends Model
             return "finish";
         }
     }
+    
     protected static function booted()
     {
         static::creating(function ($model) {

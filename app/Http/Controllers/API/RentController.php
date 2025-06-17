@@ -75,12 +75,12 @@ class RentController extends BaseController
         }
         $user = \Auth::user();
         $arraynull = [];
-        if (!$user->name) {
+        /*if (!$user->name) {
             $arraynull[] = "Nama";
-        }
-        if (!$user->email) {
+        }*/
+        /*if (!$user->email) {
             $arraynull[] = "Email";
-        }
+        }*/
         if (!$user->birth_place) {
             $arraynull[] = "Tempat Lahir";
         }

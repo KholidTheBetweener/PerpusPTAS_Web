@@ -23,7 +23,7 @@ use Carbon\Carbon;
 | Here is where you can register web routes for your application. These
 | routes are loaded by the RouteServiceProvider and all of them will
 | be assigned to the "web" middleware group. Make something great!
-|
+|A
 */
 
 Route::get('/', function () {
@@ -59,17 +59,17 @@ Auth::routes();
 
 });*/
 //
-Route::get('/books/{id}', [HomeController::class, 'show'])->name('detail');
-Route::get('/notifications',[HomeController::class,'notifications'])->name('notifications');
-Route::post('/notifications/{id}', [HomeController::class, 'marknotify'])->name('marknotify');
-Route::post('/notifications/all', [HomeController::class, 'marknotifyall'])->name('marknotifyall');
-Route::get('/userprofile',[HomeController::class,'profile'])->name('userprofile');
-Route::post('/userprofile/{id}',[HomeController::class,'update'])->name('userupdate');
-Route::post('/emailpassword',[HomeController::class,'emailpassword'])->name('emailpassword');
-Route::get('/search',[HomeController::class,'search'])->name('search');
-Route::get('/rent',[HomeController::class,'rent'])->name('rent');
-Route::post('/book/{id}/rent', [HomeController::class, 'store'])->name('requestrent');
-Route::get('/rent/{id}',[HomeController::class,'rentinfo'])->name('rentinfo');
+Route::get('/books/{id}', [HomeController::class, 'show'])->middleware('auth')->name('detail');
+Route::get('/notifications',[HomeController::class,'notifications'])->middleware('auth')->name('notifications');
+Route::post('/notifications/{id}', [HomeController::class, 'marknotify'])->middleware('auth')->name('marknotify');
+Route::get('/notifications/all', [HomeController::class, 'marknotifyall'])->middleware('auth')->name('marknotifyall');
+Route::get('/userprofile',[HomeController::class,'profile'])->middleware('auth')->name('userprofile');
+Route::post('/userprofile',[HomeController::class,'update'])->middleware('auth')->name('userupdate');
+Route::post('/emailpassword',[HomeController::class,'emailpassword'])->middleware('auth')->name('emailpassword');
+Route::get('/search',[HomeController::class,'search'])->middleware('auth')->name('search');
+Route::get('/rent',[HomeController::class,'rent'])->middleware('auth')->name('rent');
+Route::post('/book/{id}/rent', [HomeController::class, 'store'])->middleware('auth')->name('requestrent');
+Route::get('/rent/{id}',[HomeController::class,'rentinfo'])->middleware('auth')->name('rentinfo');
 //
 Route::get('/admin',[LoginController::class,'showAdminLoginForm'])->name('admin.login-view');
 Route::post('/admin',[LoginController::class,'adminLogin'])->name('admin.login');
@@ -85,12 +85,12 @@ Route::post('/admin/password/email',[App\Http\Controllers\Auth\AdminForgotPasswo
 Route::get('/admin/password/reset/{token}',[App\Http\Controllers\Auth\AdminResetPasswordController::class, 'showResetForm'])->name('admin.password.reset');
 Route::post('/admin/password/reset',[App\Http\Controllers\Auth\AdminResetPasswordController::class, 'reset'])->name('admin.password.update');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->middleware('auth')->name('home');
 Route::get('/admin/dashboard',[App\Http\Controllers\HomeController::class, 'dashboard'])->middleware('auth:admin')->name('admin.dashboard');
-Route::post('/admin/mark-as-read/{id}', [NotificationController::class, 'markNotification'])->name('admin.markNotification');
-Route::post('/admin/mark-as-read', [NotificationController::class, 'markAll'])->name('admin.markAll');
+Route::post('/admin/mark-as-read/{id}', [HomeController::class, 'markNotification'])->name('admin.markNotification');
+Route::post('/admin/mark-as-read', [HomeController::class, 'markAll'])->name('admin.markAll');
 //notify
-Route::get('/send-notification', [NotificationController::class, 'sendNotification']);
+//Route::get('/send-notification', [NotificationController::class, 'sendNotification']);
 //Admin Resource
 Route::get('/admin/rent/all',[RentController::class,'all'])->middleware('auth:admin')->name('rent.record');
 Route::get('/admin/rent/search',[RentController::class,'search'])->middleware('auth:admin')->name('rent.search');

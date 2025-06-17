@@ -52,12 +52,12 @@ class HomeController extends Controller
     {
         $user = \Auth::user();
         $arraynull = [];
-        if (!$user->name) {
+        /*if (!$user->name) {
             $arraynull[] = "Nama";
         }
         if (!$user->email) {
             $arraynull[] = "Email";
-        }
+        }*/
         if (!$user->birth_place) {
             $arraynull[] = "Tempat Lahir";
         }
@@ -84,10 +84,6 @@ class HomeController extends Controller
     }
     public function search(Request $request)
     {
-        //$rents = Rent::paginate(5); // Table-1
-        //$books = Book::all();   // Table-2
-        //$users = User::all(); 
-        //$query = $request->name;
         $query = Book::query()
         ->join('categories', 'books.category', '=', 'categories.id')
         ->where(function($query) use ($request) {
@@ -166,7 +162,7 @@ class HomeController extends Controller
         $notification = $user->unreadNotifications;
         if ($notification) {
             $notification->markAsRead();
-        return redirect()->route('admin.dashboard')->with('success','Notifikasi Sudah Terbaca');
+            return redirect()->route('notifications')->with('success','Notifikasi Sudah Terbaca');
         }
     }
     public function rent(Request $request)
@@ -234,11 +230,11 @@ class HomeController extends Controller
     }
     public function markAll(Request $request)
     {
-        $user = Auth::guard('admin')->user();
+        $user = \Auth::guard('admin')->user();
         $notification = $user->unreadNotifications;
         if ($notification) {
             $notification->markAsRead();
-        return redirect()->route('admin.dashboard')->with('success','Notifikasi Sudah Terbaca');
+            return redirect()->route('admin.dashboard')->with('success','Notifikasi Sudah Terbaca');
         }
     }
 }

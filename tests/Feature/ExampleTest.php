@@ -16,4 +16,28 @@ class ExampleTest extends TestCase
 
         $response->assertStatus(200);
     }
+    public function test_web_profile(): void
+    {
+        $response = $this->get('/profile');
+
+        $response->assertStatus(200);
+    }
+    public function test_web_about(): void
+    {
+        $response = $this->get('/about');
+
+        $response->assertStatus(200);
+    }
+    public function test_web_contact(): void
+    {
+        $response = $this->get('/contact');
+
+        $response->assertStatus(200);
+    }
+    public function test_web_download(): void
+    {
+        $response = $this->get('/download');
+
+        $response->assertStatus(200);
+    }
 }

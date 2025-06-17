@@ -31,10 +31,10 @@ class AdminController extends Controller
         ]);
         return redirect()->route('admin.index')->with('success','Admin has been created successfully.');
     }
-    protected function admin($id)
+    /*protected function admin($id)
     {
         $user = User::find($id);
-    }
+    }*/
     public function edit(Admin $admin)
     {
         return view('admin.admin.edit',compact('admin'));
@@ -53,8 +53,8 @@ class AdminController extends Controller
         $admin->delete();
         return redirect()->route('admin.index')->with('success','Admin has been deleted successfully');
     }
-    public function showAdminRegisterForm()
+    /*public function showAdminRegisterForm()
     {
         return view('auth.register', ['route' => route('admin.register-view'), 'title'=>'Admin']);
-    }
+    }*/
 }

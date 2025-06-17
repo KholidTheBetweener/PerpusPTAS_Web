@@ -16,7 +16,7 @@ class BookImport implements ToModel
     {
         // Define how to create a model from the Excel row data
         ++$this->rows;
-
+        
         return new Book([
             'category' => $row[0],
             'book_code' => $row[1],
